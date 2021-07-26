@@ -1,7 +1,9 @@
 package cleanArch.repositories.Repository
+import cleanArch.DB._
 
 abstract class getItemRepo {
-  def searchHelloWorld(id: Int): String
+  val db: Holder
+  def getItemInRepo(id: Int): Items
 }
 
 object getItemRepo

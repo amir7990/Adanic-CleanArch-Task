@@ -1,12 +1,12 @@
 package cleanArch.DB
 
-class Items(_id: Int, _message: String) {
+class Items(_id: Int, _message: String, state: Boolean) {
   var message: String = _message
   var id: Int = _id
-  var Done: Boolean = true
+  var Done: Boolean = state
 
 }
 
 object Items{
-  def apply(_id: Int, _message: String): Items = new Items(_id, _message)
+  def apply(_id: Int, _message: String, state: Boolean): Items = new Items(_id, _message, state)
 }

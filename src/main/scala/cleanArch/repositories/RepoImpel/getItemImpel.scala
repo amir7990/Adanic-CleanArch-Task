@@ -1,13 +1,14 @@
 package cleanArch.repositories.RepoImpel
 
-import cleanArch.DB.Items
-import cleanArch.repositories.Repository.getItemRepo
+import cleanArch.DB._
+import cleanArch.repositories.Repository._
 
-class getItemImpel extends getItemRepo {
-  override def searchHelloWorld(id: Int): String = {
-    val db = Items
-    val strings = db.getItems
-    strings.toMap.getOrElse(id, "NOT FOUND!")
+class getItemImpel(_db: Holder) extends getItemRepo {
+  override val db: Holder = _db
+  override def getItemInRepo(id: Int): Items = {
+    db.getItem(id)
   }
 }
- object getItemImpel extends getItemImpel
+ object getItemImpel{
+   def apply(_db: Holder): getItemImpel = new getItemImpel(_db)
+ }
