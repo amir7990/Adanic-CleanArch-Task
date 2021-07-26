@@ -1,12 +1,13 @@
-package cleanArch.repositories
+package cleanArch.repositories.RepoImpel
 
 import cleanArch.DB.Items
+import cleanArch.repositories.Repository.getItemRepo
 
-class RepoImpel extends Callback {
+class getItemImpel extends getItemRepo {
   override def searchHelloWorld(id: Int): String = {
     val db = Items
     val strings = db.getItems
     strings.toMap.getOrElse(id, "NOT FOUND!")
   }
 }
- object RepoImpel extends RepoImpel
+ object getItemImpel extends getItemImpel
