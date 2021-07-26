@@ -4,7 +4,7 @@ import cleanArch.useCases.Service._
 import cleanArch.repositories.RepoImpel.getItemImpel
 
 class getItemUseCase extends getItemService {
-  override def getHelloWorld(id: Int): String = {
+  override def getItem(id: Int): String = {
     getItemImpel.searchHelloWorld(id)
   }
 }

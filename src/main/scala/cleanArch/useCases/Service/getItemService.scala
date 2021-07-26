@@ -1,7 +1,7 @@
 package cleanArch.useCases.Service
 
 abstract class getItemService {
-  def getHelloWorld(id: Int): String
+  def getItem(id: Int): String
 }
 
 object getItemService

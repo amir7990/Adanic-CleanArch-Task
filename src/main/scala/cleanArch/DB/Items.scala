@@ -1,9 +1,12 @@
 package cleanArch.DB
 
-class Items {
-  val items = Vector((1, "Salam Donya!"), (2, "Hello World!"), (3, "Welcome to Adanic!"))
+class Items(_id: Int, _message: String) {
+  var message: String = _message
+  var id: Int = _id
+  var Done: Boolean = true
 
-  def getItems: Vector[(Int, String)] = items
 }
 
-object Items extends Items
+object Items{
+  def apply(_id: Int, _message: String): Items = new Items(_id, _message)
+}
