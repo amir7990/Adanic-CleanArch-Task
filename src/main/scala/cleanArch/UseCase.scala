@@ -1,0 +1,5 @@
+package cleanArch
+
+class UseCase {
+
+}
