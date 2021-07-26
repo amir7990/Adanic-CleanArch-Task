@@ -1,4 +1,4 @@
-package cleanArch
+package cleanArch.DB
 
 class Items {
   val items = Vector((1, "Salam Donya!"), (2, "Hello World!"), (3, "Welcome to Adanic!"))

@@ -1,4 +1,6 @@
-package cleanArch
+package cleanArch.useCases
+
+import cleanArch._
 
 class UseCase extends Service {
   override def getHelloWorld(id: Int): String = {

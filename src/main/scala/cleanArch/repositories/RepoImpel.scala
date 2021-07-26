@@ -1,4 +1,6 @@
-package cleanArch
+package cleanArch.repositories
+
+import cleanArch.DB.Items
 
 class RepoImpel extends Callback {
   override def searchHelloWorld(id: Int): String = {
