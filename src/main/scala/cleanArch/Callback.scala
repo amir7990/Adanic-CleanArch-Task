@@ -1,5 +1,7 @@
 package cleanArch
 
-class Callback {
-
+abstract class Callback {
+  def searchHelloWorld(id: Int): String
 }
+
+object Callback

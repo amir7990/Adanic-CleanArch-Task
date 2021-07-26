@@ -1,5 +1,7 @@
 package cleanArch
 
-class Service {
-
+abstract class Service {
+  def getHelloWorld(id: Int): String
 }
+
+object Service
