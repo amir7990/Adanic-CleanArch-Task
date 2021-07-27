@@ -10,9 +10,9 @@ class cleanArchTest extends munit.FunSuite {
     val thirdItem = "Welcome To Adanic Corp."
     val editMessage = "Message Changed"
     val db = Holder()
-    val add = addItemUseCase(db)
-    val get = getItemUseCase(db)
-    val edit = editItemUseCase(db)
+    val add = AddItemUseCase(db)
+    val get = GetItemUseCase(db)
+    val edit = EditItemUseCase(db)
 
     add.addItem(1, firstItem, state = true)
     add.addItem(2, secondItem, state = true)

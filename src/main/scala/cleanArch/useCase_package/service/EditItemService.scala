@@ -1,7 +1,7 @@
 package cleanArch.useCase_package.service
 
-abstract class editItemService {
+abstract class EditItemService {
   def editItem(id: Int, field: String, text: String): Unit
 }
 
-object editItemService
+object EditItemService

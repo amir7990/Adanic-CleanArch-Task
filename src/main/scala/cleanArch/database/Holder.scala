@@ -2,7 +2,7 @@ package cleanArch.database
 
 class Holder {
 
-  var items: Map[Int, Items] = Map.empty
+  private var items: Map[Int, Items] = Map.empty
 
   def addItem(item: Items): Unit ={
     val temp = Map(item.id -> item)

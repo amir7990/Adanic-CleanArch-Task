@@ -1,7 +1,7 @@
 package cleanArch.repository_package.repoImpel
 import cleanArch.repository_package.repository._
 import cleanArch.database._
-class addItemImpel(_db: Holder) extends addItemRepo {
+class AddItemImpel(_db: Holder) extends AddItemRepo {
   override val db: Holder = _db
 
   override def addItemInRepo(id: Int, text: String, state: Boolean): Unit = {
@@ -10,6 +10,6 @@ class addItemImpel(_db: Holder) extends addItemRepo {
   }
 }
 
-object addItemImpel{
-  def apply(_db: Holder): addItemImpel = new addItemImpel(_db)
+object AddItemImpel{
+  def apply(_db: Holder): AddItemImpel = new AddItemImpel(_db)
 }

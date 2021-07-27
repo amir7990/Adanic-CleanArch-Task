@@ -1,16 +1,16 @@
 package cleanArch.useCase_package.useCase
 
-import cleanArch.useCase_package.service.addItemService
+import cleanArch.useCase_package.service.AddItemService
 import cleanArch.repository_package.repoImpel._
 import cleanArch.database._
 
-class addItemUseCase(db: Holder) extends addItemService {
+class AddItemUseCase(db: Holder) extends AddItemService {
   override def addItem(id: Int, text: String, state: Boolean): Unit = {
-    val rep = addItemImpel(db)
+    val rep = AddItemImpel(db)
     rep.addItemInRepo(id, text, state)
   }
 }
 
-object addItemUseCase{
-  def apply(db: Holder): addItemUseCase = new addItemUseCase(db)
+object AddItemUseCase{
+  def apply(db: Holder): AddItemUseCase = new AddItemUseCase(db)
 }

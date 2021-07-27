@@ -8,14 +8,13 @@ class Main
 object Main{
   def main(args: Array[String]): Unit = {
     val db = Holder()
-    val add = addItemUseCase(db)
-    val get = getItemUseCase(db)
-    val edit = editItemUseCase(db)
+    val add = AddItemUseCase(db)
+    val get = GetItemUseCase(db)
+    val edit = EditItemUseCase(db)
     add.addItem(1, "hello world", state = true)
     println(get.getItem(1).message)
     edit.editItem(1, "state", "false")
     println(get.getItem(1).Done)
-    println(db.items.size)
   }
 }
 
