@@ -1,4 +1,4 @@
-package cleanArch.DB
+package cleanArch.database
 
 class Items(_id: Int, _message: String, state: Boolean) {
   var message: String = _message

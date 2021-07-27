@@ -1,8 +1,8 @@
-package cleanArch.useCases.UseCase
+package cleanArch.useCase_package.useCase
 
-import cleanArch.DB._
-import cleanArch.useCases.Service._
-import cleanArch.repositories.RepoImpel.getItemImpel
+import cleanArch.database._
+import cleanArch.useCase_package.service._
+import cleanArch.repository_package.repoImpel.getItemImpel
 
 class getItemUseCase(db: Holder) extends getItemService {
 

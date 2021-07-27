@@ -1,6 +1,6 @@
-package cleanArch.useCases.Service
+package cleanArch.useCase_package.service
 
-import cleanArch.DB.Items
+import cleanArch.database.Items
 
 abstract class getItemService {
   def getItem(id: Int): Items

@@ -1,7 +1,7 @@
-package cleanArch.repositories.RepoImpel
+package cleanArch.repository_package.repoImpel
 
-import cleanArch.DB._
-import cleanArch.repositories.Repository._
+import cleanArch.database._
+import cleanArch.repository_package.repository._
 
 class getItemImpel(_db: Holder) extends getItemRepo {
   override val db: Holder = _db
