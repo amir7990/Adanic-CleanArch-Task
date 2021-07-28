@@ -5,8 +5,10 @@ import cleanArch.repository_package.repoImpel._
 import cleanArch.database._
 
 class EditItemUseCase(db: Holder) extends EditItemService {
+
+  override val rep: EditItemImpel = EditItemImpel(db)
+
   override def editItem(id: Int, field: String, text: String): Unit = {
-    val rep = EditItemImpel(db)
     rep.editItemInRepo(id, field, text)
   }
 }

@@ -1,5 +1,7 @@
 package cleanArch.database
 
+import cleanArch.entity.Items
+
 class Holder {
 
   private var items: Map[Int, Items] = Map.empty
