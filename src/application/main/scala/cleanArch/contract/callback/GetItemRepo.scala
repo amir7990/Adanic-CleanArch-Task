@@ -1,7 +1,7 @@
-package cleanArch.repository_package.repository
+package cleanArch.contract.callback
 
-import cleanArch.database._
-import cleanArch.entity.Items
+import cleanArch.domain.entity.Items
+import cleanArch.module.Holder
 
 abstract class GetItemRepo {
 

@@ -1,15 +1,15 @@
 package cleanArch
 
-import cleanArch.useCase_package.useCase._
-import cleanArch.database._
+import cleanArch.application.usecase._
+import cleanArch.module._
 
 class cleanArchTest extends munit.FunSuite {
   test("Main Test"){
+    val db = Holder()
     val firstItem = "Hello World!"
     val secondItem = "SALAM DONYA!"
     val thirdItem = "Welcome To Adanic Corp."
     val editMessage = "Message Changed"
-    val db = Holder()
     val add = AddItemUseCase(db)
     val get = GetItemUseCase(db)
     val edit = EditItemUseCase(db)

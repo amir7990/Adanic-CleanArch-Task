@@ -1,6 +1,6 @@
-package cleanArch.useCase_package.service
+package cleanArch.contract.service
 
-import cleanArch.repository_package.repoImpel._
+import cleanArch.application.repository.AddItemImpel
 
 abstract class AddItemService{
 

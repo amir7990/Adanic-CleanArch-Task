@@ -1,10 +1,10 @@
-package cleanArch.database
+package cleanArch.module
 
-import cleanArch.entity.Items
+import cleanArch.domain.entity.Items
 
 class Holder {
 
-  private var items: Map[Int, Items] = Map.empty
+  var items: Map[Int, Items] = Map.empty
 
   def addItem(item: Items): Unit ={
     val temp = Map(item.id -> item)
@@ -12,7 +12,13 @@ class Holder {
     items = newItems
   }
 
-  def getItem(id: Int) : Items = items(id)
+  def getItem(id: Int) : Items = {
+    if (items.isEmpty) {
+      Items(0, "Item Not Found", state = false)
+    }else{
+      items(id)
+    }
+  }
 
   def editItem(id: Int, field: String, text: String): Unit = {
     val item = items(id)

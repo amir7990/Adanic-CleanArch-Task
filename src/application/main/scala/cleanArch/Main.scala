@@ -1,7 +1,7 @@
 package cleanArch
 
-import cleanArch.useCase_package.useCase._
-import cleanArch.database._
+import cleanArch.application.usecase._
+import cleanArch.module._
 
 class Main
 

@@ -1,4 +1,4 @@
-package cleanArch.entity
+package cleanArch.domain.entity
 
 class Items(idNum: Int, messageText: String, state: Boolean) {
   var message: String = messageText
