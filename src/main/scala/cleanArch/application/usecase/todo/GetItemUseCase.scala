@@ -12,6 +12,6 @@ class GetItemUseCase(database: Holder) extends GetItemService {
   }
 }
 
-object GetItemUseCase{
+object GetItemUseCase {
   def apply(database: Holder): GetItemUseCase = new GetItemUseCase(database: Holder)
 }

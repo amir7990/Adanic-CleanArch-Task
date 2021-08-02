@@ -10,5 +10,3 @@ abstract class GetItemRepo {
   def getItemInRepo(id: Int): Option[Item]
 
 }
-
-object GetItemRepo

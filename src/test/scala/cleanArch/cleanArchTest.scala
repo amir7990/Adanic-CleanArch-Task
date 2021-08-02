@@ -1,10 +1,9 @@
 package cleanArch
 
-import cleanArch.application.usecase._
 import cleanArch.module.config.Config
 
 class cleanArchTest extends munit.FunSuite {
-  test("Main Test"){
+  test("Main Test") {
     val config = Config.ConfigOne
     val firstItem = "Hello World!"
     val secondItem = "SALAM DONYA!"
@@ -22,5 +21,4 @@ class cleanArchTest extends munit.FunSuite {
     config.editItem(1, "message", editMessage)
     assert(config.getItem(1).get.message == editMessage)
   }
-
 }

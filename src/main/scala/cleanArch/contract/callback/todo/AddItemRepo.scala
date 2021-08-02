@@ -9,5 +9,3 @@ abstract class AddItemRepo {
   def addItemInRepo(id: Int, text: String, state: Boolean): Unit
 
 }
-
-object AddItemRepo

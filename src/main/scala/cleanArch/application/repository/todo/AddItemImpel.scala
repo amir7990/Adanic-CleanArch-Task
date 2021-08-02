@@ -2,10 +2,9 @@ package cleanArch.application.repository.todo
 
 import cleanArch.contract.callback.todo.AddItemRepo
 import cleanArch.domain.todo.Item
-import cleanArch.module._
 import cleanArch.module.database.Holder
 
-class AddItemImpel(database: Holder) extends AddItemRepo{
+class AddItemImpel(database: Holder) extends AddItemRepo {
 
   override val db: Holder = database
 
@@ -15,6 +14,6 @@ class AddItemImpel(database: Holder) extends AddItemRepo{
   }
 }
 
-object AddItemImpel{
+object AddItemImpel {
   def apply(database: Holder): AddItemImpel = new AddItemImpel(database: Holder)
 }

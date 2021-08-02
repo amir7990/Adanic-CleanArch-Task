@@ -9,5 +9,3 @@ abstract class EditItemRepo {
   def editItemInRepo(id: Int, field: String, text: String): Unit
 
 }
-
-object EditItemRepo

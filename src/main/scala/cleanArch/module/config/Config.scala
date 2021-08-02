@@ -1,9 +1,9 @@
 package cleanArch.module.config
 
-import cleanArch.application.usecase.AddItemUseCase
 import cleanArch.contract.service.todo._
 import cleanArch.domain.todo.Item
 import cleanArch.module.database.Holder
+import cleanArch.application.usecase.todo._
 
 sealed abstract class Config {
 
@@ -27,7 +27,7 @@ sealed abstract class Config {
 
 
 object Config {
-  class ConfigOne extends Config{
+  class ConfigOne extends Config {
 
     override val db: Holder = Holder()
     override val addItemService: AddItemService = AddItemUseCase(db)

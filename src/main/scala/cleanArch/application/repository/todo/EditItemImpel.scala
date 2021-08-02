@@ -12,6 +12,6 @@ class EditItemImpel(database: Holder) extends EditItemRepo {
   }
 }
 
-object EditItemImpel{
+object EditItemImpel {
   def apply(database: Holder): EditItemImpel = new EditItemImpel(database: Holder)
 }
