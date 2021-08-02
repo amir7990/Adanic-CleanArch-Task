@@ -1,14 +1,14 @@
-package cleanArch.application.repository
+package cleanArch.application.repository.todo
 
-import cleanArch.contract.callback.GetItemRepo
-import cleanArch.domain.entity.Items
-import cleanArch.module.Holder
+import cleanArch.contract.callback.todo.GetItemRepo
+import cleanArch.domain.todo.Item
+import cleanArch.module.database.Holder
 
 class GetItemImpel(database: Holder) extends GetItemRepo{
 
   override val db: Holder = database
 
-  override def getItemInRepo(id: Int): Items = {
+  override def getItemInRepo(id: Int): Option[Item] = {
     db.getItem(id)
   }
 }

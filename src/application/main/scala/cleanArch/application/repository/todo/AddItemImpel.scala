@@ -1,15 +1,16 @@
-package cleanArch.application.repository
+package cleanArch.application.repository.todo
 
-import cleanArch.contract.callback.AddItemRepo
-import cleanArch.domain.entity.Items
+import cleanArch.contract.callback.todo.AddItemRepo
+import cleanArch.domain.todo.Item
 import cleanArch.module._
+import cleanArch.module.database.Holder
 
 class AddItemImpel(database: Holder) extends AddItemRepo{
 
   override val db: Holder = database
 
   override def addItemInRepo(id: Int, text: String, state: Boolean): Unit = {
-    val item = Items(id, text, state)
+    val item = Item(id, text, state)
     db.addItem(item)
   }
 }

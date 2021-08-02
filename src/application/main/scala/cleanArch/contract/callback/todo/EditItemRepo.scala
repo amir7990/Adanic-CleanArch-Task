@@ -1,6 +1,6 @@
-package cleanArch.contract.callback
+package cleanArch.contract.callback.todo
 
-import cleanArch.module.Holder
+import cleanArch.module.database.Holder
 
 abstract class EditItemRepo {
 

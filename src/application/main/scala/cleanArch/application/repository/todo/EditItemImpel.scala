@@ -1,7 +1,7 @@
-package cleanArch.application.repository
+package cleanArch.application.repository.todo
 
-import cleanArch.contract.callback.EditItemRepo
-import cleanArch.module.Holder
+import cleanArch.contract.callback.todo.EditItemRepo
+import cleanArch.module.database.Holder
 
 class EditItemImpel(database: Holder) extends EditItemRepo {
 
