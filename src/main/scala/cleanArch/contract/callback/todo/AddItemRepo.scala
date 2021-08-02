@@ -6,6 +6,6 @@ abstract class AddItemRepo {
 
   val db: Holder
 
-  def addItemInRepo(id: Int, text: String, state: Boolean): Unit
+  def addItemInRepo(text: String, state: Boolean): Unit
 
 }

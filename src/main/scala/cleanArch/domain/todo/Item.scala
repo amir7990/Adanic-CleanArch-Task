@@ -1,3 +1,3 @@
 package cleanArch.domain.todo
 
-case class Item(id: Int, message: String, done: Boolean)
+case class Item(message: String, done: Boolean)

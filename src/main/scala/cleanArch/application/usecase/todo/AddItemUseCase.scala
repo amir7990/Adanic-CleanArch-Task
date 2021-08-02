@@ -7,7 +7,7 @@ import cleanArch.module.database.Holder
 class AddItemUseCase(database: Holder) extends AddItemService {
   override def call(request: AddItemService.Request): Unit = {
     val rep = AddItemImpel(database)
-    rep.addItemInRepo(request.id, request.text, request.state)
+    rep.addItemInRepo(request.text, request.state)
   }
 }
 

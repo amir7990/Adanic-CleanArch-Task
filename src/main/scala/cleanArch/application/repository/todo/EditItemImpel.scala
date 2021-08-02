@@ -8,7 +8,7 @@ class EditItemImpel(database: Holder) extends EditItemRepo {
   override val db: Holder = database
 
   override def editItemInRepo(id: Int, field: String, text: String): Unit = {
-    db.editItem(id, field, text)
+    db.editItem(1, id, field, text)
   }
 }
 

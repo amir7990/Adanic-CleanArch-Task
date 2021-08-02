@@ -9,7 +9,7 @@ class GetItemImpel(database: Holder) extends GetItemRepo {
   override val db: Holder = database
 
   override def getItemInRepo(id: Int): Option[Item] = {
-    db.getItem(id)
+    db.getItem(1, id)
   }
 }
 

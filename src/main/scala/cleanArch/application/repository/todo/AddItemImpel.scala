@@ -8,9 +8,9 @@ class AddItemImpel(database: Holder) extends AddItemRepo {
 
   override val db: Holder = database
 
-  override def addItemInRepo(id: Int, text: String, state: Boolean): Unit = {
-    val item = Item(id, text, state)
-    db.addItem(item)
+  override def addItemInRepo(text: String, state: Boolean): Unit = {
+    val item = Item(text, state)
+    db.addItem(1, item)
   }
 }
 

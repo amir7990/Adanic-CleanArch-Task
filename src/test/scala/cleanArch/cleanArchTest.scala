@@ -10,9 +10,9 @@ class cleanArchTest extends munit.FunSuite {
     val thirdItem = "Welcome To Adanic Corp."
     val editMessage = "Message Changed"
 
-    config.addItem(1, firstItem, state = true)
-    config.addItem(2, secondItem, state = true)
-    config.addItem(3, thirdItem, state = false)
+    config.addItem(firstItem, state = true)
+    config.addItem(secondItem, state = true)
+    config.addItem(thirdItem, state = false)
 
     assert(config.getItem(1).get.message == firstItem)
     assert(config.getItem(2).get.message == secondItem)

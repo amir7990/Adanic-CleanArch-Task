@@ -12,8 +12,8 @@ sealed abstract class Config {
   val editItemService: EditItemService
   val getItemService: GetItemService
 
-  def addItem(id: Int, message: String, state: Boolean): Unit = {
-    addItemService.call(AddItemService.Request(id, message, state))
+  def addItem(message: String, state: Boolean): Unit = {
+    addItemService.call(AddItemService.Request(message, state))
   }
 
   def getItem(id: Int): Option[Item] = {
