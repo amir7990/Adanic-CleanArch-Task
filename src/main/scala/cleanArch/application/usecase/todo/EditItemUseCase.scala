@@ -11,12 +11,12 @@ class EditItemUseCase(database: Holder) extends EditItemService {
     val itemRep = EditItemImpel(database)
     val session = userRep.getSession(request.username)
     session match {
-      case None => throw new NoSuchElementException()
+      case None => throw new Exception(s"User is Not Signed Up!")
       case Some(session) =>
         if (session.isLogin) {
           itemRep.editItemInRepo(request.id, request.field, request.text)
         } else {
-          throw new NoSuchElementException()
+          throw new Exception(s"User is Not Signed In")
         }
     }
   }

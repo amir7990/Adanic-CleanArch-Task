@@ -21,7 +21,7 @@ class Holder {
     @tailrec
     def iterator(usersMap: Map[Int, Session], username: String): Int = {
       if (usersMap.isEmpty) {
-        throw new NoSuchElementException()
+        throw new Exception(s"User Not Found!")
       } else {
         if (usersMap.head._2.user.username.equals(username)) {
           usersMap.head._2.user.id
@@ -41,17 +41,17 @@ class Holder {
   }
 
   def getItem(userId: Int, id: Int): Option[Item] = {
-    itemMap.getOrElse(userId, throw new NoSuchElementException()).get(id)
+    itemMap.getOrElse(userId, throw new Exception(s"Item Not Found!")).get(id)
   }
 
   def editItem(userId: Int, id: Int, field: String, text: String): Unit = {
-    val itemsMap = itemMap.getOrElse(userId, throw new NoSuchElementException())
+    val itemsMap = itemMap.getOrElse(userId, throw new Exception(s"Item Not Found!"))
     val newItem = field match {
-      case "message" => itemsMap.getOrElse(id, throw new NoSuchElementException()).copy(message = text)
+      case "message" => itemsMap.getOrElse(id, throw new Exception(s"Item Not Found!")).copy(message = text)
       case "done" =>
         val done = text == "true"
-        itemsMap.getOrElse(id, throw new NoSuchElementException()).copy(done = done)
-      case _ => throw new NoSuchFieldException()
+        itemsMap.getOrElse(id, throw new Exception(s"Item Not Found!")).copy(done = done)
+      case _ => throw new Exception(s"Invalid Field")
     }
     val x = itemMap(userId) + (id -> newItem)
     itemMap = itemMap + (userId -> x)
@@ -68,7 +68,7 @@ class Holder {
     val userId = findUserIdByUsername(username)
     val session = userMap(userId)
     if (session.user.password != password) {
-      throw new NoSuchElementException()
+      throw new Exception(s"Password is not Correct")
     } else {
       val newSession = session.copy(isLogin = true)
       userMap = userMap + (userId -> newSession)

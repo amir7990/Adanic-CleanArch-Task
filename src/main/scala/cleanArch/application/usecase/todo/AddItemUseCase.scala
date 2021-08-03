@@ -11,13 +11,13 @@ class AddItemUseCase(database: Holder) extends AddItemService {
     val userRep = UserRepository(database)
     val session = userRep.getSession(request.username)
     session match {
-      case None => throw new NoSuchElementException()
+      case None => throw new Exception(s"User is Not Signed Up!")
       case Some(session) =>
         if (session.isLogin) {
           itemRep.addItemInRepo(request.text, request.state)
         }
         else {
-          throw new NoSuchElementException()
+          throw new Exception(s"User is Not Signed In!")
         }
     }
 
