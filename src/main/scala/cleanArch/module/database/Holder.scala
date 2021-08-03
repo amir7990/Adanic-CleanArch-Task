@@ -41,7 +41,6 @@ class Holder {
   }
 
   def getItem(userId: Int, id: Int): Option[Item] = {
-    println(itemMap.getOrElse(userId, throw new NoSuchElementException())(id))
     itemMap.getOrElse(userId, throw new NoSuchElementException()).get(id)
   }
 
@@ -68,7 +67,7 @@ class Holder {
   def signIn(username: String, password: String): Unit = {
     val userId = findUserIdByUsername(username)
     val session = userMap(userId)
-    if (session.user.password.equals(password)) {
+    if (session.user.password != password) {
       throw new NoSuchElementException()
     } else {
       val newSession = session.copy(isLogin = true)
@@ -76,13 +75,18 @@ class Holder {
     }
   }
 
-  def signOut(userId: Int): Unit = {
-    val session = userMap.getOrElse(userId, throw new NoSuchElementException)
+  def signOut(username: String): Unit = {
+    val userId = findUserIdByUsername(username)
+    val session = userMap(userId)
     val newSession = session.copy(isLogin = false)
     userMap = userMap + (userId -> newSession)
   }
+
+  def findSession(username: String): Option[Session] = {
+    userMap.get(findUserIdByUsername(username))
+  }
 }
 
-object Holder {
+object Holder extends Holder {
   def apply(): Holder = new Holder
 }

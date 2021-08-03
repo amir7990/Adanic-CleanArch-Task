@@ -6,5 +6,5 @@ import cleanArch.domain.todo.Item
 abstract class GetItemService extends Service[GetItemService.Request, Option[Item]]
 
 object GetItemService {
-  case class Request(id: Int)
+  case class Request(username: String, id: Int)
 }
