@@ -21,7 +21,7 @@ class Holder {
     @tailrec
     def iterator(usersMap: Map[Int, Session], username: String): Int = {
       if (usersMap.isEmpty) {
-        throw new Exception(s"User Not Found!")
+        -1
       } else {
         if (usersMap.head._2.user.username.equals(username)) {
           usersMap.head._2.user.id
@@ -58,32 +58,50 @@ class Holder {
   }
 
   def signUp(username: String, password: String): Unit = {
-    val id = createId(userMap)
-    val user = User(id, username, password)
-    itemMap = itemMap + (id -> Map.empty)
-    userMap = userMap + (id -> Session(user, isLogin = true))
+    val checkUser = findUserIdByUsername(username)
+    if (checkUser != -1) {
+      throw new Exception(s"User Already Exists!")
+    } else {
+      val id = createId(userMap)
+      val user = User(id, username, password)
+      itemMap = itemMap + (id -> Map.empty)
+      userMap = userMap + (id -> Session(user, isLogin = true))
+    }
   }
 
   def signIn(username: String, password: String): Unit = {
     val userId = findUserIdByUsername(username)
-    val session = userMap(userId)
-    if (session.user.password != password) {
-      throw new Exception(s"Password is not Correct")
+    if (userId == -1) {
+      throw new Exception(s"User Not Found!")
     } else {
-      val newSession = session.copy(isLogin = true)
-      userMap = userMap + (userId -> newSession)
+      val session = userMap(userId)
+      if (session.user.password != password) {
+        throw new Exception(s"Password is not Correct")
+      } else {
+        val newSession = session.copy(isLogin = true)
+        userMap = userMap + (userId -> newSession)
+      }
     }
   }
 
   def signOut(username: String): Unit = {
     val userId = findUserIdByUsername(username)
-    val session = userMap(userId)
-    val newSession = session.copy(isLogin = false)
-    userMap = userMap + (userId -> newSession)
+    if (userId == -1) {
+      throw new Exception(s"User Not Found!")
+    } else {
+      val session = userMap(userId)
+      val newSession = session.copy(isLogin = false)
+      userMap = userMap + (userId -> newSession)
+    }
   }
 
   def findSession(username: String): Option[Session] = {
-    userMap.get(findUserIdByUsername(username))
+    val userId = findUserIdByUsername(username)
+    if (userId == -1) {
+      throw new Exception(s"User Not Found!")
+    } else {
+      userMap.get(userId)
+    }
   }
 }
 

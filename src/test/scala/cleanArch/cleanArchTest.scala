@@ -27,6 +27,5 @@ class cleanArchTest extends munit.FunSuite {
     config.editItem("Amir", 1, "message", editMessage)
     assert(config.getItem("Amir", 1).get.message == editMessage)
 
-
   }
 }
