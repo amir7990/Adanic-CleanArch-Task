@@ -1,29 +1,16 @@
 package cleanArch.application.usecase.todo
 
-import cleanArch.application.repository.auth.UserRepository
-import cleanArch.application.repository.todo.GetItemImpel
+import cleanArch.contract.callback.auth.UserCallback
+import cleanArch.contract.callback.todo.ItemCallback
 import cleanArch.contract.service.todo.GetItemService
 import cleanArch.domain.todo.Item
-import cleanArch.module.database.Holder
+import scala.util.Try
 
-class GetItemUseCase(database: Holder) extends GetItemService {
-  override def call(request: GetItemService.Request): Option[Item] = {
-    val itemRep = GetItemImpel(database)
-    val userRep = UserRepository(database)
-    val session = userRep.getSession(request.username)
-    session match {
-      case None => throw new Exception(s"User is Not Signed Up!")
-      case Some(session) =>
-        if (session.isLogin) {
-          itemRep.getItemInRepo(request.id)
-        } else {
-          throw new Exception(s"User is Not Signed In!")
-        }
-    }
-
+class GetItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) extends GetItemService {
+  override def call(request: GetItemService.Request): Try[Item] = {
+    val userId = userCallback.getUserId(request.username)
+    val user = userCallback.getUserById(userId).get
+    val itemId = user.getItemId(request.id)
+    itemCallback.getItemCallback(itemId)
   }
-}
-
-object GetItemUseCase {
-  def apply(database: Holder): GetItemUseCase = new GetItemUseCase(database: Holder)
 }

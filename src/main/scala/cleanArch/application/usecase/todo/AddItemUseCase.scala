@@ -1,29 +1,19 @@
 package cleanArch.application.usecase.todo
 
-import cleanArch.application.repository.auth.UserRepository
-import cleanArch.application.repository.todo.AddItemImpel
+import cleanArch.contract.callback.auth.UserCallback
+import cleanArch.contract.callback.todo.ItemCallback
 import cleanArch.contract.service.todo.AddItemService
-import cleanArch.module.database.Holder
 
-class AddItemUseCase(database: Holder) extends AddItemService {
+class AddItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) extends AddItemService {
+
   override def call(request: AddItemService.Request): Unit = {
-    val itemRep = AddItemImpel(database)
-    val userRep = UserRepository(database)
-    val session = userRep.getSession(request.username)
-    session match {
-      case None => throw new Exception(s"User is Not Signed Up!")
-      case Some(session) =>
-        if (session.isLogin) {
-          itemRep.addItemInRepo(request.text, request.state)
-        }
-        else {
-          throw new Exception(s"User is Not Signed In!")
-        }
-    }
 
+    val userId = userCallback.getUserId(request.username)
+    val user = userCallback.getUserById(userId).get
+    val databaseId = itemCallback.getItemNumbers + 1
+    val userItemId = user.idMap.size + 1
+    val newUser = user.updateIdMap(user.idMap + (userItemId -> databaseId))
+    userCallback.updateUser(userId, newUser)
+    itemCallback.addItemCallback(request.text, request.state)
   }
-}
-
-object AddItemUseCase {
-  def apply(database: Holder): AddItemUseCase = new AddItemUseCase(database: Holder)
 }

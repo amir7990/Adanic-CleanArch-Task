@@ -1,18 +1,13 @@
 package cleanArch.application.usecase.auth
 
-import cleanArch.application.repository.auth.UserRepository
+import cleanArch.contract.callback.auth.UserCallback
 import cleanArch.contract.service.auth._
-import cleanArch.module.database.Holder
+import scala.util.Try
 
-class SignInUseCase(database: Holder) extends SignInService {
+class SignInUseCase(userCallback: UserCallback) extends SignInService {
 
   override def call(request: SignInService.Request): Unit = {
-    val rep = UserRepository(database)
-    rep.signInCallback(request.username, request.password)
+    userCallback.signInCallback(request.username, request.password)
   }
 
-}
-
-object SignInUseCase {
-  def apply(database: Holder): SignInUseCase = new SignInUseCase(database)
 }

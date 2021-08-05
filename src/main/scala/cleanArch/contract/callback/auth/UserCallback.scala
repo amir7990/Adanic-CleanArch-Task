@@ -1,14 +1,27 @@
 package cleanArch.contract.callback.auth
 
-import cleanArch.domain.auth.Session
-import cleanArch.module.database.Holder
+import cleanArch.domain.auth.{Session, User}
+import cleanArch.domain.todo.Item
+import cleanArch.module.database.{Database}
+
+import scala.util.Try
 
 abstract class UserCallback {
 
-  val db: Holder
+  protected val itemDatabase: Database[Item]
+
+  protected val userDatabase: Database[User]
+
   def signInCallback(username: String, password: String): Unit
-  def getSession(username: String): Option[Session]
+
+  def getUserId(username: String): Int
+
+  def getUserById(id: Int): Option[User]
+
   def signOutCallback(username: String): Unit
+
   def signUpCallback(username: String, password: String): Unit
+
+  def updateUser(id: Int, user: User): Unit
 
 }
