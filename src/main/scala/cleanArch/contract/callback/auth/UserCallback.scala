@@ -8,6 +8,8 @@ import scala.util.Try
 
 abstract class UserCallback {
 
+  protected val sessionDatabase: Database[Session]
+
   protected val itemDatabase: Database[Item]
 
   protected val userDatabase: Database[User]

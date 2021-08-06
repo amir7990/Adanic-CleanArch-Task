@@ -1,6 +1,6 @@
 package cleanArch.domain.auth
 
-case class User(username: String, password: String, loginState: Boolean, idMap: Map[Int, Int]) {
+case class User(username: String, password: String, idMap: Map[Int, Int]) {
 
   def getItemId(userItemId: Int): Int = {
     idMap(userItemId)
@@ -8,10 +8,6 @@ case class User(username: String, password: String, loginState: Boolean, idMap: 
 
   def updateIdMap(newIdMap: Map[Int, Int]): User = {
     copy(idMap = newIdMap)
-  }
-
-  def updateState(state: Boolean): User = {
-    copy(loginState = state)
   }
 
 }
