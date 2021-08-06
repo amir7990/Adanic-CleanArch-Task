@@ -14,16 +14,15 @@ class UserRepository(itemDB: Database[Item], userDB: Database[User], sessionDB: 
   override protected val sessionDatabase: Database[Session] = sessionDB
   override protected val userDatabase: Database[User] = userDB
 
-  override def getUserId(username: String): Int = {
-
+  override def getUserId(username: String): Try[Int] = {
     val userNumbers = userDatabase.getNumberOfElements
 
     @tailrec
-    def getUserById(username: String, id: Int): Int = {
+    def getUserById(username: String, id: Int): Try[Int] = {
       val user = userDatabase.getElement(id)
       user match {
         case None => throw new NoSuchElementException(s"User Not Found")
-        case Some(user) if user.username == username => id
+        case Some(user) if user.username == username => Try(id)
         case Some(_) => getUserById(username, id - 1)
       }
     }
@@ -35,11 +34,11 @@ class UserRepository(itemDB: Database[Item], userDB: Database[User], sessionDB: 
     userDatabase.getElement(id)
   }
 
-  override def signInCallback(username: String, password: String): Unit = {
-    val userId = Try(getUserId(username))
+  override def signInCallback(username: String, password: String): Try[Unit] = {
+    val userId = getUserId(username)
     val user = userId match {
       case Success(id) => userDatabase.getElement(id).get
-      case Failure(_) => throw new NoSuchElementException(s"User Not Found")
+      case Failure(e) => throw new NoSuchElementException(s"User Not Found")
     }
     val session = sessionDatabase.getElement(userId.get).get
     if (user.password != password) {
@@ -49,33 +48,31 @@ class UserRepository(itemDB: Database[Item], userDB: Database[User], sessionDB: 
       throw new NoSuchElementException(s"$username Is Already Signed In")
     }
     val newSession = session.updateState(state = true)
-    sessionDatabase.updateElement(newSession.userId, newSession)
+    Try(sessionDatabase.updateElement(newSession.userId, newSession))
   }
 
-  override def signUpCallback(username: String, password: String): Unit = {
+  override def signUpCallback(username: String, password: String): Try[Unit] = {
     val userId = Try(getUserId(username))
     val user = userId match {
-      case Success(_) => throw new NoSuchElementException(s"User Already exists")
-      case Failure(_) =>
-        User(username, password, Map.empty)
+      case Success(_) => throw new NoSuchElementException(s"$username Already Exists")
+      case Failure(_) => User(username, password, Map.empty)
     }
     val session = Session(sessionDatabase.getNumberOfElements + 1, isLogin = true)
     Try(sessionDatabase.addElement(session))
     Try(userDatabase.addElement(user))
   }
 
-  override def signOutCallback(username: String): Unit = {
-    val userId = Try(getUserId(username))
-    val user = userId match {
-      case Success(id) => userDatabase.getElement(id).get
+  override def signOutCallback(username: String): Try[Unit] = {
+    val userId = getUserId(username)
+    val session = userId match {
+      case Success(id) => sessionDatabase.getElement(id).get
       case Failure(_) => throw new NoSuchElementException(s"User Not Found")
     }
-    val session = sessionDatabase.getElement(userId.get).get
     if (!session.isLogin) {
-      throw new NoSuchElementException(s"$username Is Already Signed Up")
+      throw new NoSuchElementException(s"$username Is Already Signed Out")
     }
     val newSession = session.updateState(state = false)
-    sessionDatabase.updateElement(newSession.userId, newSession)
+    Try(sessionDatabase.updateElement(newSession.userId, newSession))
   }
 
   override def updateUser(id: Int, user: User): Unit = {

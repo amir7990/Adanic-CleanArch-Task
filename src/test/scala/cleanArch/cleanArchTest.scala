@@ -7,7 +7,6 @@ import cleanArch.module.config.Config
 class cleanArchTest extends munit.FunSuite {
   test("Main Test") {
     import Config.ConfigOne._
-    val config = Config.ConfigOne
     val firstItem = "Hello World!"
     val secondItem = "SALAM DONYA!"
     val thirdItem = "Welcome To Adanic Corp."

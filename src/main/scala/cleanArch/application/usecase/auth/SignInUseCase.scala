@@ -6,7 +6,7 @@ import scala.util.Try
 
 class SignInUseCase(userCallback: UserCallback) extends SignInService {
 
-  override def call(request: SignInService.Request): Unit = {
+  override def call(request: SignInService.Request): Try[Unit] = {
     userCallback.signInCallback(request.username, request.password)
   }
 
