@@ -5,77 +5,88 @@ import cleanArch.domain.auth.{Session, User}
 import cleanArch.domain.todo.Item
 import cleanArch.module.database.Database
 
-import scala.annotation.tailrec
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.{ExecutionContext, Future}
 
-class UserRepository(itemDB: Database[Item], userDB: Database[User], sessionDB: Database[Session]) extends UserCallback {
+
+class UserRepository(itemDB: Database[Item], userDB: Database[User], sessionDB: Database[Session]) extends UserCallback with Database[User] {
 
   override protected val itemDatabase: Database[Item] = itemDB
   override protected val sessionDatabase: Database[Session] = sessionDB
   override protected val userDatabase: Database[User] = userDB
 
-  override def getUserId(username: String): Try[Int] = {
+  override def getUserByUsername(username: String)(implicit ec: ExecutionContext): Future[Option[User]] = {
     val userNumbers = userDatabase.getNumberOfElements
 
-    @tailrec
-    def getUserById(username: String, id: Int): Try[Int] = {
-      val user = userDatabase.getElement(id)
-      user match {
-        case None => throw new NoSuchElementException(s"User Not Found")
-        case Some(user) if user.username == username => Try(id)
-        case Some(_) => getUserById(username, id - 1)
-      }
+    def getUserBy(username: String, id: Int): Future[Option[User]] = {
+      for {
+        userOption <- userDatabase.getElement(id)
+        user <- userOption match {
+          case None => Future successful None
+          case Some(user) if user.username == username => Future successful Option(user)
+          case Some(_) => getUserBy(username, id - 1)
+        }
+      } yield user
     }
 
-    getUserById(username, userNumbers)
+    getUserBy(username, userNumbers)
   }
 
-  override def getUserById(id: Int): Option[User] = {
+  override def getUserById(id: Int)(implicit ec: ExecutionContext): Future[Option[User]] = {
     userDatabase.getElement(id)
   }
 
-  override def signInCallback(username: String, password: String): Try[Unit] = {
-    val userId = getUserId(username)
-    val user = userId match {
-      case Success(id) => userDatabase.getElement(id).get
-      case Failure(e) => throw new NoSuchElementException(s"User Not Found")
-    }
-    val session = sessionDatabase.getElement(userId.get).get
-    if (user.password != password) {
-      throw new NoSuchElementException(s"Incorrect Password For $username")
-    }
-    if (session.isLogin) {
-      throw new NoSuchElementException(s"$username Is Already Signed In")
-    }
-    val newSession = session.updateState(state = true)
-    Try(sessionDatabase.updateElement(newSession.userId, newSession))
+  override def signInCallback(username: String, password: String)(implicit ec: ExecutionContext): Future[Unit] = {
+    for {
+      userId <- getUserByUsername(username)
+      user <- userId match {
+        case Some(user) => Future successful user
+        case None => Future failed new NoSuchElementException(s"User Not Found")
+      }
+      session <- if (user.password != password) {
+        Future failed new NoSuchElementException(s"Incorrect Password for $username")
+      } else {
+        sessionDatabase.getElement(user.id)
+      }
+      newSession <- if (session.get.isLogin) {
+        Future failed new NoSuchElementException(s"$username Already Signed In")
+      } else {
+        val newSession = session.get.updateState(state = true)
+        sessionDatabase.updateElement(newSession.userId, newSession)
+      }
+    } yield newSession
   }
 
-  override def signUpCallback(username: String, password: String): Try[Unit] = {
-    val userId = Try(getUserId(username))
-    val user = userId match {
-      case Success(_) => throw new NoSuchElementException(s"$username Already Exists")
-      case Failure(_) => User(username, password, Map.empty)
-    }
-    val session = Session(sessionDatabase.getNumberOfElements + 1, isLogin = true)
-    Try(sessionDatabase.addElement(session))
-    Try(userDatabase.addElement(user))
+  override def signUpCallback(username: String, password: String)(implicit ec: ExecutionContext): Future[Session] = {
+    val userId = userDatabase.getNumberOfElements + 1
+    for {
+      userOption <- getUserByUsername(username)
+      user <- userOption match {
+        case Some(_) => Future failed new NoSuchElementException(s"$username Already Exists")
+        case None => Future successful User(userId, username, password, Map.empty)
+      }
+      session = Session(user.id, isLogin = true)
+      _ <- sessionDatabase.addElement(session)
+      _ <- userDatabase.addElement(user)
+    } yield session
   }
 
-  override def signOutCallback(username: String): Try[Unit] = {
-    val userId = getUserId(username)
-    val session = userId match {
-      case Success(id) => sessionDatabase.getElement(id).get
-      case Failure(_) => throw new NoSuchElementException(s"User Not Found")
-    }
-    if (!session.isLogin) {
-      throw new NoSuchElementException(s"$username Is Already Signed Out")
-    }
-    val newSession = session.updateState(state = false)
-    Try(sessionDatabase.updateElement(newSession.userId, newSession))
+  override def signOutCallback(username: String)(implicit ec: ExecutionContext): Future[Unit] = {
+    for {
+      userOption <- getUserByUsername(username)
+      session <- userOption match {
+        case Some(user) => sessionDatabase.getElement(user.id)
+        case None => Future failed new NoSuchElementException(s"User Not Found")
+      }
+      unit <- if (!session.get.isLogin) {
+        Future failed new NoSuchElementException(s"$username Already Signed Out")
+      } else {
+        val newSession = session.get.updateState(state = false)
+        sessionDatabase.updateElement(newSession.userId, newSession)
+      }
+    } yield unit
   }
 
-  override def updateUser(id: Int, user: User): Unit = {
+  override def updateUser(id: Int, user: User)(implicit ec: ExecutionContext): Future[Unit] = {
     userDatabase.updateElement(id, user)
   }
 

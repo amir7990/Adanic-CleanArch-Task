@@ -1,10 +1,9 @@
 package cleanArch.contract.service.auth
 
 import cleanArch.contract.service.Service
+import cleanArch.domain.auth.Session
 
-import scala.util.Try
-
-abstract class SignUpService extends Service[SignUpService.Request, Try[Unit]]
+abstract class SignUpService extends Service[SignUpService.Request, Session]
 
 object SignUpService {
   case class Request(username: String, password: String)

@@ -4,7 +4,7 @@ import cleanArch.domain.auth.User
 import cleanArch.domain.todo.Item
 import cleanArch.module.database.Database
 
-import scala.util.Try
+import scala.concurrent.{ExecutionContext, Future}
 
 abstract class ItemCallback {
 
@@ -12,12 +12,12 @@ abstract class ItemCallback {
 
   protected val userDatabase: Database[User]
 
-  def addItemCallback(text: String, state: Boolean) : Try[Unit]
+  def addItemCallback(text: String, state: Boolean)(implicit ec: ExecutionContext): Future[Unit]
 
-  def getItemCallback(id: Int): Try[Item]
+  def getItemCallback(id: Int)(implicit ec: ExecutionContext): Future[Item]
 
-  def editItemCallback(id: Int, field: String, text: String): Try[Unit]
+  def editItemCallback(id: Int, field: String, text: String)(implicit ec: ExecutionContext): Future[Unit]
 
-  def getItemNumbers : Int
+  def getItemNumbers: Int
 
 }

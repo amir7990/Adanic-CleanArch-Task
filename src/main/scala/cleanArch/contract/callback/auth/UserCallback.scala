@@ -2,9 +2,9 @@ package cleanArch.contract.callback.auth
 
 import cleanArch.domain.auth.{Session, User}
 import cleanArch.domain.todo.Item
-import cleanArch.module.database.{Database}
+import cleanArch.module.database.Database
 
-import scala.util.Try
+import scala.concurrent.{ExecutionContext, Future}
 
 abstract class UserCallback {
 
@@ -14,16 +14,16 @@ abstract class UserCallback {
 
   protected val userDatabase: Database[User]
 
-  def signInCallback(username: String, password: String): Try[Unit]
+  def signInCallback(username: String, password: String)(implicit ec: ExecutionContext): Future[Unit]
 
-  def getUserId(username: String): Try[Int]
+  def getUserByUsername(username: String)(implicit ec: ExecutionContext): Future[Option[User]]
 
-  def getUserById(id: Int): Option[User]
+  def getUserById(id: Int)(implicit ec: ExecutionContext): Future[Option[User]]
 
-  def signOutCallback(username: String): Try[Unit]
+  def signOutCallback(username: String)(implicit ec: ExecutionContext): Future[Unit]
 
-  def signUpCallback(username: String, password: String): Try[Unit]
+  def signUpCallback(username: String, password: String)(implicit ec: ExecutionContext): Future[Session]
 
-  def updateUser(id: Int, user: User): Unit
+  def updateUser(id: Int, user: User)(implicit ec: ExecutionContext): Future[Unit]
 
 }

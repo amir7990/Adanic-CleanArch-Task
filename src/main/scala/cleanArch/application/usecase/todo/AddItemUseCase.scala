@@ -4,21 +4,22 @@ import cleanArch.contract.callback.auth.UserCallback
 import cleanArch.contract.callback.todo.ItemCallback
 import cleanArch.contract.service.todo.AddItemService
 
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.{ExecutionContext, Future}
 
 class AddItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) extends AddItemService {
 
-   override def call(request: AddItemService.Request): Try[Unit] = {
-
-    val userId = userCallback.getUserId(request.username)
-    val user = userId match {
-      case Success(id) => userCallback.getUserById(id).get
-      case Failure(_) => throw new NoSuchElementException(s"User Not Found")
-    }
-    val databaseId = itemCallback.getItemNumbers + 1
-    val userItemId = user.idMap.size + 1
-    val newUser = user.updateIdMap(user.idMap + (userItemId -> databaseId))
-    userCallback.updateUser(userId.get, newUser)
-    itemCallback.addItemCallback(request.text, request.state)
+  override def call(request: AddItemService.Request)(implicit ec: ExecutionContext): Future[Unit] = {
+    for {
+      userOption <- userCallback.getUserByUsername(request.username)
+      user <- userOption match {
+        case None => Future failed new NoSuchElementException(s"User Not Found")
+        case Some(user) => Future successful user
+      }
+      databaseId = itemCallback.getItemNumbers + 1
+      userItemId = user.idMap.size + 1
+      newUser = user.updateIdMap(user.idMap + (userItemId -> databaseId))
+      _ <- userCallback.updateUser(user.id, newUser)
+      _ <- itemCallback.addItemCallback(request.text, request.state)
+    } yield Future.unit
   }
 }
