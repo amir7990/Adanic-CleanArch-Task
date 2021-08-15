@@ -12,5 +12,3 @@ libraryDependencies ++= Seq("org.scalameta" %% "munit" % "0.7.27" % Test,
   "org.specs2" %% "specs2-core" % "4.12.3" % "test")
 
 testFrameworks += new TestFramework("munit.Framework")
-
-parallelExecution in Test := true
