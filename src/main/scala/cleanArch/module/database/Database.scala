@@ -1,44 +1,56 @@
 package cleanArch.module.database
 
-import cleanArch.domain.auth.{Session, User}
+import cleanArch.domain.auth.Session
+import cleanArch.domain.auth.User
 import cleanArch.domain.todo.Item
 
 import java.util.concurrent.Executors
-import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
+import java.util.concurrent.atomic.AtomicLong
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContextExecutor
+import scala.concurrent.Future
 
 trait Database[T] {
 
   implicit val ec: ExecutionContext = Database.ec
 
-  protected var data: Map[Int, T] = Map.empty
+  protected var data: Map[Long, T] = Map.empty
 
-  def createId(idMap: Map[Int, _]): Int = {
-    idMap.toList match {
-      case _ :: _ => idMap.last._1 + 1
-      case Nil => 1
-    }
+  val id : AtomicLong = new AtomicLong(1)
+  var lastId : Long = 1
+
+  def createId(): Long = {
+    id.getAndIncrement()
   }
 
-  def addElement(t: T): Future[Unit] = {
-    val id = createId(data)
-    Future {
+  def addElement(t: T): Future[T] = Future {
+    val id = createId()
+    data synchronized  {
+      data = data + (id -> t)
+      lastId = id + 1
+    }
+    t
+  }
+
+  def updateElement(id: Long, t: T): Future[T] = Future {
+    data synchronized  {
       data = data + (id -> t)
     }
+    t
   }
 
-  def updateElement(id: Int, t: T): Future[Unit] = {
-    Future {
-      data = data + (id -> t)
-    }
-  }
-
-  def getElement(id: Int): Future[Option[T]] = {
-    Future {
+  def getElement(id: Long): Future[Option[T]] = Future {
+    data synchronized {
       data.get(id)
     }
   }
 
-  def getNumberOfElements: Int = data.size
+  def removeElement(id: Long): Future[Unit] = Future {
+    data synchronized {
+      data = data removed id
+    }
+  }
+
 }
 
 object Database {
@@ -47,7 +59,7 @@ object Database {
 
   object SessionDatabase extends Database[Session]
 
-  object ItemDatabase extends Database[Item]
+  object ItemDatabase extends Database[Map[Int, Item]]
 
   object UserDatabase extends Database[User]
 
