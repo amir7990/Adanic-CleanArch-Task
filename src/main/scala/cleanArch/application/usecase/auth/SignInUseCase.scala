@@ -21,6 +21,7 @@ class SignInUseCase(userCallback: UserCallback, sessionCallback: SessionCallback
     sessionOption <- sessionCallback get user.id
     session <- sessionOption match {
       case Some(session) => Future successful session
+      case None => Future failed new Exception(s"No Session Was Found for ${user.username}")
     }
     newSession <- if (session.isLogin) {
       Future failed new Exception(s"${user.username} Is Already Signed In")
