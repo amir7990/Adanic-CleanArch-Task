@@ -26,11 +26,12 @@ class EditItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) ex
       case None => Future failed new NoSuchElementException(s"Item Not found")
       case Some(item) => Future successful item
     }
-    newItem = request.field match {
-      case "message" => item.editMessage(request.text)
+    newItem <- request.field match {
+      case "message" => Future successful item.editMessage(request.text)
       case "done" =>
         val done = request.text == "true"
-        item.editState(done)
+        Future successful item.editState(done)
+      case _ => Future failed new Exception(s"Invalid Field")
     }
     newItemMap = itemMap + (request.id -> newItem)
     _ <- itemCallback updateItemCallback(user.id, newItemMap)
