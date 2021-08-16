@@ -16,13 +16,13 @@ class ItemRepository extends ItemCallback with Database[Map[Int, Item]] {
       if (map.contains(init)) findNewId(map, init + 1) else init
     }
 
-    val item = Item(text, state)
     val oldItemOption = data.find(key => key._1 == userId)
     val itemMap = oldItemOption match {
       case None => Map[Int, Item]()
       case Some(map) => map._2
     }
     val itemId = findNewId(itemMap, 1)
+    val item = Item(itemId, text, state)
     val newITemMap = itemMap + (itemId -> item)
     updateElement(userId, newITemMap)
   }

@@ -15,7 +15,6 @@ class CleanArchTest extends munit.FunSuite {
 
   implicit val ec1: ExecutionContextExecutor = ExecutionContext fromExecutor Executors.newCachedThreadPool()
 
-  val logger: Logger = LoggerFactory.getLogger("test")
   val WAIT_TIME: Int = 10
 
   import cleanArch.module.config.Config.ConfigOne._
