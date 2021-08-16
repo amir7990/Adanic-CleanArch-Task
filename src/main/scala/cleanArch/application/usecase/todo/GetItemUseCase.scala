@@ -22,6 +22,7 @@ class GetItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) ext
         case None => Future failed new Exception(s"Item Not Found")
         case Some(item) => Future successful item
       }
+      case None => Future failed new Exception(s"User Not Found")
     }
   } yield item
 
