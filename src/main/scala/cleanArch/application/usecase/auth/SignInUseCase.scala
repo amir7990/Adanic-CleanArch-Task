@@ -1,6 +1,7 @@
 package cleanArch.application.usecase.auth
 
-import cleanArch.contract.callback.auth.{SessionCallback, UserCallback}
+import cleanArch.contract.callback.auth.SessionCallback
+import cleanArch.contract.callback.auth.UserCallback
 import cleanArch.contract.service.auth._
 import cleanArch.domain.auth.Session
 

@@ -16,8 +16,13 @@ trait Database[T] {
 
   protected var data: Map[Long, T] = Map.empty
 
-  val id : AtomicLong = new AtomicLong(1)
-  var lastId : Long = 1
+  private val id : AtomicLong = new AtomicLong(1)
+
+  private var lastId : Long = 1
+
+  def getLastId: Long = {
+    lastId
+  }
 
   def createId(): Long = {
     id.getAndIncrement()
@@ -47,7 +52,7 @@ trait Database[T] {
 
   def removeElement(id: Long): Future[Unit] = Future {
     data synchronized {
-      data = data removed id
+      data = data - id
     }
   }
 

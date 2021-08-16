@@ -18,9 +18,11 @@ class UserRepository extends UserCallback with Database[User] {
   }
 
   override def add(username: String, password: String)(implicit ec: ExecutionContext): Future[User] = {
-    val id = lastId
-    val user = User(id, username, password)
-    addElement(user)
+    synchronized {
+      val id = getLastId
+      val user = User(id, username, password)
+      addElement(user)
+    }
   }
 
   override def update(id: Long, user: User)(implicit ec: ExecutionContext): Future[User] = {
