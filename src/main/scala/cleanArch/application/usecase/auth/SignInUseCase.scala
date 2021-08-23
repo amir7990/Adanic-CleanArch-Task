@@ -13,11 +13,11 @@ class SignInUseCase(userCallback: UserCallback, sessionCallback: SessionCallback
   override def call(request: SignInService.Request)(implicit ec: ExecutionContext): Future[Session] = for {
     userOption <- userCallback getUserByUsername request.username
     user <- userOption match {
-      case None => Future failed new Exception(s"User Not found")
+      case None => Future failed new Exception(s"Incorrect username or password")
       case Some(user) => Future successful user
     }
-    _ = if (user.username != request.password) {
-      Future failed new Exception(s"Incorrect Password For ${user.username}")
+    _ = if (user.password != request.password) {
+      Future failed new Exception(s"Incorrect username or password")
     }
     sessionOption <- sessionCallback get user.id
     session <- sessionOption match {

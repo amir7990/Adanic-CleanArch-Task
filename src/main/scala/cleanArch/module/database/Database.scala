@@ -12,13 +12,13 @@ import scala.concurrent.Future
 
 trait Database[T] {
 
-  implicit val ec: ExecutionContext = Database.ec
+  private implicit val ec: ExecutionContext = Database.ec
 
   protected var data: Map[Long, T] = Map.empty
 
-  private val id : AtomicLong = new AtomicLong(1)
+  private val id: AtomicLong = new AtomicLong(1)
 
-  private var lastId : Long = 1
+  private var lastId: Long = 1
 
   def getLastId: Long = {
     lastId
@@ -30,7 +30,7 @@ trait Database[T] {
 
   def addElement(t: T): Future[T] = Future {
     val id = createId()
-    data synchronized  {
+    data synchronized {
       data = data + (id -> t)
       lastId = id + 1
     }
@@ -38,7 +38,7 @@ trait Database[T] {
   }
 
   def updateElement(id: Long, t: T): Future[T] = Future {
-    data synchronized  {
+    data synchronized {
       data = data + (id -> t)
     }
     t

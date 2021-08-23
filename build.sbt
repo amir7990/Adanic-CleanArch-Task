@@ -10,6 +10,7 @@ libraryDependencies ++= Seq(
   // Logg
   "org.slf4j" % "slf4j-api" % "1.7.32",
   "org.slf4j" % "slf4j-simple" % "1.7.32",
+  "ch.qos.logback" % "logback-classic" % "1.2.3",
 
   // Test
   "org.scalatest" %% "scalatest" % "3.2.9",
