@@ -2,12 +2,12 @@ package cleanArch.application.repository.auth
 
 import cleanArch.contract.callback.auth.UserCallback
 import cleanArch.domain.auth.User
-import cleanArch.module.database.Database
+import cleanArch.module.database.DatabaseModule
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
 
-class UserRepository extends UserCallback with Database[User] {
+class UserRepository extends UserCallback with DatabaseModule[User] {
 
   override def getUserByUsername(username: String)(implicit ec: ExecutionContext): Future[Option[User]] = Future {
     data.values.find(_.username == username)

@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory
 
 import java.lang.Thread.sleep
 import java.util.concurrent.Executors
-import scala.concurrent.ExecutionContext
-import scala.concurrent.ExecutionContextExecutor
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor}
 import scala.language.postfixOps
 
 class CleanArchTest extends munit.FunSuite {
@@ -17,7 +17,7 @@ class CleanArchTest extends munit.FunSuite {
 
   val WAIT_TIME: Int = 10
 
-  import cleanArch.module.config.Config.ConfigOne._
+  import cleanArch.module.config.ConfigModule.ConfigModuleOne._
 
   test("Main Test") {
     // init
@@ -28,6 +28,7 @@ class CleanArchTest extends munit.FunSuite {
     val firstUser = "Amir"
     val firsPass = "7990"
     //
+    Await.result(signUpService call SignUpService.Request(firstUser, firsPass), Duration("1 seconds"))
     signUpService call SignUpService.Request(firstUser, firsPass)
     sleep(WAIT_TIME)
     addItemService call AddItemService.Request(firstUser, firstItem, state = true)

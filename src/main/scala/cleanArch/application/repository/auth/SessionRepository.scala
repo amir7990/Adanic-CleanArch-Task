@@ -2,11 +2,11 @@ package cleanArch.application.repository.auth
 
 import cleanArch.contract.callback.auth.SessionCallback
 import cleanArch.domain.auth.Session
-import cleanArch.module.database.Database
+import cleanArch.module.database.DatabaseModule
 
 import scala.concurrent.Future
 
-class SessionRepository extends SessionCallback with Database[Session] {
+class SessionRepository extends SessionCallback with DatabaseModule[Session] {
 
   override def add(userId: Long): Future[Session] = {
     val session = Session(userId, isLogin = true)

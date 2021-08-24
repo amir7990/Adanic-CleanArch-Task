@@ -10,9 +10,9 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.Future
 
-trait Database[T] {
+trait DatabaseModule[T] {
 
-  implicit val ec: ExecutionContext = Database.ec
+  implicit val ec: ExecutionContext = DatabaseModule.ec
 
   protected var data: Map[Long, T] = Map.empty
 
@@ -53,14 +53,14 @@ trait Database[T] {
 
 }
 
-object Database {
+object DatabaseModule {
 
   private val ec: ExecutionContextExecutor = ExecutionContext fromExecutor Executors.newCachedThreadPool()
 
-  object SessionDatabase extends Database[Session]
+  object SessionDatabaseModule$ extends DatabaseModule[Session]
 
-  object ItemDatabase extends Database[Map[Int, Item]]
+  object ItemDatabaseModule$ extends DatabaseModule[Map[Int, Item]]
 
-  object UserDatabase extends Database[User]
+  object UserDatabaseModule$ extends DatabaseModule[User]
 
 }

@@ -2,13 +2,13 @@ package cleanArch.application.repository.todo
 
 import cleanArch.contract.callback.todo.ItemCallback
 import cleanArch.domain.todo.Item
-import cleanArch.module.database.Database
+import cleanArch.module.database.DatabaseModule
 
 import scala.annotation.tailrec
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
-class ItemRepository extends ItemCallback with Database[Map[Int, Item]] {
+class ItemRepository extends ItemCallback with DatabaseModule[Map[Int, Item]] {
 
   override def addItemCallback(userId: Long, text: String, state: Boolean)(implicit ec: ExecutionContext): Future[Map[Int, Item]] = {
     @tailrec

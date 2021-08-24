@@ -9,7 +9,7 @@ import cleanArch.contract.service.todo._
 import cleanArch.application.repository.todo._
 import cleanArch.application.usecase.todo._
 
-sealed abstract class Config {
+sealed abstract class ConfigModule {
 
   val userCallback: UserCallback
   val itemCallback: ItemCallback
@@ -24,9 +24,9 @@ sealed abstract class Config {
 }
 
 
-object Config {
+object ConfigModule {
 
-  class ConfigOne extends Config {
+  class ConfigModuleOne$ extends ConfigModule {
 
     override val userCallback: UserCallback = UserRepository
     override val sessionCallback: SessionCallback = SessionRepository
@@ -40,6 +40,6 @@ object Config {
 
   }
 
-  object ConfigOne extends ConfigOne
+  object ConfigModuleOne extends ConfigModuleOne$
 
 }

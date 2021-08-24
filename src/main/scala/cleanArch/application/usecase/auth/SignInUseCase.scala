@@ -15,7 +15,7 @@ class SignInUseCase(userCallback: UserCallback, sessionCallback: SessionCallback
       case None => Future failed new Exception(s"User Not found")
       case Some(user) => Future successful user
     }
-    _ = if (user.username != request.password) {
+    _ = if (user.password != request.password) {
       Future failed new Exception(s"Incorrect Password For ${user.username}")
     }
     sessionOption <- sessionCallback get user.id
