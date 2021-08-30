@@ -1,13 +1,13 @@
-package cleanArch.application.repository.auth
+package cleanArch.application.repository.inmemory.repository.auth
 
 import cleanArch.contract.callback.auth.UserCallback
 import cleanArch.domain.auth.User
-import cleanArch.module.database.DatabaseModule
+import cleanArch.module.inmemory.InMemoryModule
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
 
-class UserRepository extends UserCallback with DatabaseModule[User] {
+class UserRepository extends UserCallback with InMemoryModule[User] {
 
   override def getUserByUsername(username: String)(implicit ec: ExecutionContext): Future[Option[User]] = Future {
     data.values.find(_.username == username)

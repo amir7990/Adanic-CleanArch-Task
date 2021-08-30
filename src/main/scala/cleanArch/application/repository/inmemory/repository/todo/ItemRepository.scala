@@ -1,14 +1,14 @@
-package cleanArch.application.repository.todo
+package cleanArch.application.repository.inmemory.repository.todo
 
 import cleanArch.contract.callback.todo.ItemCallback
 import cleanArch.domain.todo.Item
-import cleanArch.module.database.DatabaseModule
+import cleanArch.module.inmemory.InMemoryModule
 
 import scala.annotation.tailrec
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
-class ItemRepository extends ItemCallback with DatabaseModule[Map[Int, Item]] {
+class ItemRepository extends ItemCallback with InMemoryModule[Map[Int, Item]] {
 
   override def addItemCallback(userId: Long, text: String, state: Boolean)(implicit ec: ExecutionContext): Future[Map[Int, Item]] = {
     @tailrec
@@ -22,7 +22,7 @@ class ItemRepository extends ItemCallback with DatabaseModule[Map[Int, Item]] {
       case Some(map) => map._2
     }
     val itemId = findNewId(itemMap, 1)
-    val item = Item(itemId, text, state)
+    val item = Item(itemId, userId,  text, state)
     val newITemMap = itemMap + (itemId -> item)
     updateElement(userId, newITemMap)
   }

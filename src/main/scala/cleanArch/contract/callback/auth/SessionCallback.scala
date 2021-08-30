@@ -6,11 +6,11 @@ import scala.concurrent.Future
 
 abstract class SessionCallback {
 
-  def add(userId: Long): Future[Session]
+  def add(userId: Long): Future[Int]
 
   def get(id: Long): Future[Option[Session]]
 
-  def update(session: Session): Future[Session]
+  def update(session: Session): Future[Int]
 
   def remove(id: Long): Future[Unit]
 

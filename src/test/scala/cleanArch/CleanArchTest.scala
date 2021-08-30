@@ -11,7 +11,7 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor}
 import scala.language.postfixOps
 
-class CleanArchTest extends munit.FunSuite {
+class cleanArchTest extends munit.FunSuite {
 
   implicit val ec1: ExecutionContextExecutor = ExecutionContext fromExecutor Executors.newCachedThreadPool()
 
