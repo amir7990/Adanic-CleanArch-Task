@@ -20,11 +20,12 @@ class SignOutUseCase(userCallback: UserCallback, sessionCallback: SessionCallbac
       case Some(session) => Future successful session
       case None => Future failed new Exception(s"No Session Was Found for ${user.username}")
     }
-    newSession <- if (!session.isLogin) {
+    _ <- if (!session.isLogin) {
       Future failed new Exception(s"${user.username} Is Already Signed Out")
     } else {
       sessionCallback update session.updateState(state = false)
     }
-  } yield newSession
+    newSessionOption <- sessionCallback get user.id
+  } yield newSessionOption.get
 
 }

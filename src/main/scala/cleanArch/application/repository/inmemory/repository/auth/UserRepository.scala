@@ -17,14 +17,16 @@ class UserRepository extends UserCallback with InMemoryModule[User] {
     data.values.find(_.id == id)
   }
 
-  override def add(username: String, password: String)(implicit ec: ExecutionContext): Future[User] = {
+  override def add(username: String, password: String)(implicit ec: ExecutionContext): Future[Int] = {
     val id = lastId
     val user = User(id, username, password)
     addElement(user)
+    Future { id.toInt }
   }
 
-  override def update(id: Long, user: User)(implicit ec: ExecutionContext): Future[User] = {
+  override def update(id: Long, user: User)(implicit ec: ExecutionContext): Future[Int] = {
     updateElement(id, user)
+    Future { id.toInt }
   }
 
   override def remove(id: Long)(implicit ec: ExecutionContext): Future[Unit] = {
