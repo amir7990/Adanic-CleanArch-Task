@@ -56,3 +56,5 @@ class UserRepository extends UserCallback with DatabaseModule{
   }
 
 }
+
+object UserRepository extends UserRepository

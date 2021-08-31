@@ -47,3 +47,5 @@ class ItemRepository extends ItemCallback with DatabaseModule {
   }
 
 }
+
+object ItemRepository extends ItemRepository

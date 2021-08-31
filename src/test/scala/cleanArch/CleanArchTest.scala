@@ -28,10 +28,10 @@ class cleanArchTest extends munit.FunSuite {
     val firstUser = "Amir"
     val firsPass = "7990"
     //
-    Await.result(signUpService call SignUpService.Request(firstUser, firsPass), Duration("1 seconds"))
-    signUpService call SignUpService.Request(firstUser, firsPass)
+    println(Await.result(signUpService call SignUpService.Request(firstUser, firsPass), Duration("1 seconds")))
+    println(signUpService call SignUpService.Request(firstUser, firsPass))
     sleep(WAIT_TIME)
-    addItemService call AddItemService.Request(firstUser, firstItem, state = true)
+    println(addItemService call AddItemService.Request(firstUser, firstItem, state = true))
     sleep(WAIT_TIME)
     addItemService call AddItemService.Request(firstUser, secondItem, state = true)
     sleep(WAIT_TIME)

@@ -1,7 +1,7 @@
 package cleanArch.module.config
 
-import cleanArch.application.repository.inmemory.repository.auth.{SessionRepository, UserRepository}
-import cleanArch.application.repository.inmemory.repository.todo.ItemRepository
+import cleanArch.application.repository.data.repository.auth._
+import cleanArch.application.repository.data.repository.todo.ItemRepository
 import cleanArch.application.usecase.auth._
 import cleanArch.contract.callback.auth._
 import cleanArch.contract.callback.todo._

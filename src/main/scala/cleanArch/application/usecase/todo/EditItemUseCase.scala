@@ -12,16 +12,11 @@ class EditItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) ex
 
   override def call(request: EditItemService.Request)(implicit ec: ExecutionContext): Future[Item] = for {
     userOption <- userCallback.getUserByUsername(request.username)
-    user <- userOption match {
+    _ <- userOption match {
       case None => Future failed new NoSuchElementException(s"User Not found")
       case Some(user) => Future successful user
     }
-    itemMapOption <- itemCallback getItemCallback user.id
-    itemMap <- itemMapOption match {
-      case None => Future failed new Exception(s"${request.username} Has No Items")
-      case Some(map) => Future successful map
-    }
-    itemOption = itemMap.get(request.id)
+    itemOption <- itemCallback getItemCallback request.id
     item <- itemOption match {
       case None => Future failed new NoSuchElementException(s"Item Not found")
       case Some(item) => Future successful item
@@ -33,8 +28,7 @@ class EditItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) ex
         Future successful item.editState(done)
       case _ => Future failed new Exception(s"Invalid Field")
     }
-    newItemMap = itemMap + (request.id -> newItem)
-    _ <- itemCallback updateItemCallback(user.id, newItemMap)
+    _ <- itemCallback updateItemCallback(request.id, newItem)
   } yield newItem
 
 }

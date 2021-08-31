@@ -15,7 +15,7 @@ class SessionRepository extends SessionCallback with DatabaseModule {
     NamedDB(cleanArchDatabase) localTx { implicit session =>
       sql"""
            INSERT INTO Session
-           (userId, isLogin) VALUES ($userId, 'TRUE')
+           (userId, isLogin) VALUES ($userId)
          """.update().apply()
     }
   }
@@ -47,3 +47,5 @@ class SessionRepository extends SessionCallback with DatabaseModule {
   }
 
 }
+
+object SessionRepository extends SessionRepository

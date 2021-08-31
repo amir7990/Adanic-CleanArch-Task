@@ -8,31 +8,24 @@ import scala.annotation.tailrec
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
-class ItemRepository extends ItemCallback with InMemoryModule[Map[Int, Item]] {
+class ItemRepository extends ItemCallback with InMemoryModule[Item] {
 
-  override def addItemCallback(userId: Long, text: String, state: Boolean)(implicit ec: ExecutionContext): Future[Map[Int, Item]] = {
-    @tailrec
-    def findNewId(map: Map[Int, _], init: Int): Int = {
-      if (map.contains(init)) findNewId(map, init + 1) else init
+  override def addItemCallback(userId: Long, text: String)(implicit ec: ExecutionContext): Future[Int] = {
+    synchronized {
+      val id = lastId
+      val item = Item(id, userId, text, done = false)
+      addElement(item)
+      Future{ id.toInt }
     }
-
-    val oldItemOption = data.find(key => key._1 == userId)
-    val itemMap = oldItemOption match {
-      case None => Map[Int, Item]()
-      case Some(map) => map._2
-    }
-    val itemId = findNewId(itemMap, 1)
-    val item = Item(itemId, userId,  text, state)
-    val newITemMap = itemMap + (itemId -> item)
-    updateElement(userId, newITemMap)
   }
 
-  override def getItemCallback(id: Long)(implicit ec: ExecutionContext): Future[Option[Map[Int, Item]]] = {
+  override def getItemCallback(id: Long)(implicit ec: ExecutionContext): Future[Option[Item]] = {
     getElement(id)
   }
 
-  override def updateItemCallback(id: Long, itemMap: Map[Int, Item])(implicit ec: ExecutionContext): Future[Map[Int, Item]] = {
-    updateElement(id, itemMap)
+  override def updateItemCallback(id: Long, item: Item)(implicit ec: ExecutionContext): Future[Int] = {
+    updateElement(id, item)
+    Future{ id.toInt }
   }
 
   override def removeItemCallback(id: Long)(implicit ec: ExecutionContext): Future[Unit] = {
