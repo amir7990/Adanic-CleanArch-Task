@@ -1,12 +1,12 @@
 package cleanArch.module.config
 
-import cleanArch.application.repository.data.repository.auth._
-import cleanArch.application.repository.data.repository.todo.ItemRepository
+import cleanArch.application.repository.auth._
 import cleanArch.application.usecase.auth._
 import cleanArch.contract.callback.auth._
 import cleanArch.contract.callback.todo._
 import cleanArch.contract.service.auth._
 import cleanArch.contract.service.todo._
+import cleanArch.application.repository.todo._
 import cleanArch.application.usecase.todo._
 
 sealed abstract class ConfigModule {
@@ -26,7 +26,7 @@ sealed abstract class ConfigModule {
 
 object ConfigModule {
 
-  class ConfigModuleOne extends ConfigModule {
+  class ConfigModuleOne$ extends ConfigModule {
 
     override val userCallback: UserCallback = UserRepository
     override val sessionCallback: SessionCallback = SessionRepository
@@ -40,6 +40,6 @@ object ConfigModule {
 
   }
 
-  object ConfigModuleOne extends ConfigModuleOne
+  object ConfigModuleOne extends ConfigModuleOne$
 
 }

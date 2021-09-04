@@ -1,6 +1,6 @@
 package cleanArch.domain.todo
 
-case class Item(id: Long, userId: Long, message: String, done: Boolean) {
+case class Item(id: Long, message: String, done: Boolean) {
 
   override def toString: String = {
     s"Message: $message \t State: $done"

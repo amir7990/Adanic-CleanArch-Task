@@ -10,9 +10,9 @@ abstract class UserCallback {
 
   def getUserById(id: Long)(implicit ec: ExecutionContext): Future[Option[User]]
 
-  def add(username: String, password: String)(implicit ec: ExecutionContext): Future[Int]
+  def add(username: String, password: String)(implicit ec: ExecutionContext): Future[User]
 
-  def update(id: Long, user: User)(implicit ec: ExecutionContext): Future[Int]
+  def update(id: Long, user: User)(implicit ec: ExecutionContext): Future[User]
 
   def remove(id: Long)(implicit ec: ExecutionContext): Future[Unit]
 

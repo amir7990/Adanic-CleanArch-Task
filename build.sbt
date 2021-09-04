@@ -2,7 +2,7 @@ name := "CleanArch"
 
 version := "0.1"
 
-scalaVersion := "2.12.12"
+scalaVersion := "2.13.6"
 
 scalacOptions ++= Seq("-language:implicitConversions", "-deprecation")
 

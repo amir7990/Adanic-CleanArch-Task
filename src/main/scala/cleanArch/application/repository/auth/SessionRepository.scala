@@ -1,22 +1,20 @@
-package cleanArch.application.repository.inmemory.repository.auth
+package cleanArch.application.repository.auth
 
 import cleanArch.contract.callback.auth.SessionCallback
 import cleanArch.domain.auth.Session
-import cleanArch.module.inmemory.InMemoryModule
+import cleanArch.module.database.DatabaseModule
 
 import scala.concurrent.Future
 
-class SessionRepository extends SessionCallback with InMemoryModule[Session] {
+class SessionRepository extends SessionCallback with DatabaseModule[Session] {
 
-  override def add(userId: Long): Future[Int] = {
+  override def add(userId: Long): Future[Session] = {
     val session = Session(userId, isLogin = true)
     addElement(session)
-    Future { userId.toInt }
   }
 
-  override def update(session: Session): Future[Int] = {
+  override def update(session: Session): Future[Session] = {
     updateElement(session.userId, session)
-    Future { session.userId.toInt }
   }
 
   override def get(id: Long): Future[Option[Session]] = {

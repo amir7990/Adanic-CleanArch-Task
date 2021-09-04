@@ -11,7 +11,7 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor}
 import scala.language.postfixOps
 
-class cleanArchTest extends munit.FunSuite {
+class CleanArchTest extends munit.FunSuite {
 
   implicit val ec1: ExecutionContextExecutor = ExecutionContext fromExecutor Executors.newCachedThreadPool()
 
@@ -28,10 +28,10 @@ class cleanArchTest extends munit.FunSuite {
     val firstUser = "Amir"
     val firsPass = "7990"
     //
-    println(Await.result(signUpService call SignUpService.Request(firstUser, firsPass), Duration("1 seconds")))
-    println(signUpService call SignUpService.Request(firstUser, firsPass))
+    Await.result(signUpService call SignUpService.Request(firstUser, firsPass), Duration("1 seconds"))
+    signUpService call SignUpService.Request(firstUser, firsPass)
     sleep(WAIT_TIME)
-    println(addItemService call AddItemService.Request(firstUser, firstItem, state = true))
+    addItemService call AddItemService.Request(firstUser, firstItem, state = true)
     sleep(WAIT_TIME)
     addItemService call AddItemService.Request(firstUser, secondItem, state = true)
     sleep(WAIT_TIME)
