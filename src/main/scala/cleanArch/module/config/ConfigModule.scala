@@ -26,7 +26,7 @@ sealed abstract class ConfigModule {
 
 object ConfigModule {
 
-  class ConfigModuleOne$ extends ConfigModule {
+  class ConfigModuleOne extends ConfigModule {
 
     override val userCallback: UserCallback = UserRepository
     override val sessionCallback: SessionCallback = SessionRepository
@@ -40,6 +40,6 @@ object ConfigModule {
 
   }
 
-  object ConfigModuleOne extends ConfigModuleOne$
+  object ConfigModuleOne extends ConfigModuleOne
 
 }
