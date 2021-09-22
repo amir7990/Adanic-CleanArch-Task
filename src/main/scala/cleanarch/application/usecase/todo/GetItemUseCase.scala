@@ -18,10 +18,8 @@ class GetItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) ext
     }
     itemOption <- itemCallback getItemCallback user.id
     item <- itemOption match {
-      case Some(map) => map.get(request.id) match {
-        case None => Future failed new Exception(s"Item Not Found")
-        case Some(item) => Future successful item
-      }
+      case None => Future failed new Exception(s"Item Not Found")
+      case Some(item) => Future successful item
     }
   } yield item
 

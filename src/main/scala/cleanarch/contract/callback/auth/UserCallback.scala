@@ -1,7 +1,7 @@
 package cleanarch.contract.callback.auth
 
 import cleanarch.domain.auth.User
-import scala.concurrent.ExecutionContext
+
 import scala.concurrent.Future
 
 abstract class UserCallback {
@@ -12,7 +12,7 @@ abstract class UserCallback {
 
   def add(username: String, password: String): Future[User]
 
-  def update(id: Long, user: User): Future[User]
+  def update(id: Long, user: User): Future[Unit]
 
   def remove(id: Long): Future[Unit]
 

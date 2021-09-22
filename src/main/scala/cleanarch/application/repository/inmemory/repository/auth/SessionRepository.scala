@@ -13,7 +13,7 @@ class SessionRepository extends SessionCallback with InMemoryModule[Session] {
     addElement(session)
   }
 
-  override def update(session: Session): Future[Session] = {
+  override def update(session: Session): Future[Unit] = {
     updateElement(session.userId, session)
   }
 

@@ -5,7 +5,6 @@ import cleanarch.domain.auth.User
 import cleanarch.module.inmemory.InMemoryModule
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
 
 class UserRepository extends UserCallback with InMemoryModule[User] {
 
@@ -23,7 +22,7 @@ class UserRepository extends UserCallback with InMemoryModule[User] {
     addElement(user)
   }
 
-  override def update(id: Long, user: User): Future[User] = {
+  override def update(id: Long, user: User): Future[Unit] = {
     updateElement(id, user)
   }
 

@@ -12,20 +12,17 @@ import scala.concurrent.Future
 class UserRepository extends UserCallback with DatabaseModule{
 
   override def getUserByUsername(username: String): Future[Option[User]] = Future {
-    object User extends SQLSyntaxSupport[User]
-    val u = User.syntax("u")
     NamedDB(cleanArchDatabase) readOnly { implicit session =>
-      println("salam")
-      withSQL{
-        select.from(User as u).where.eq(u.username, username)
-      }.map(UserAdapter.user).single().apply()
+      sql"""
+           select * from users where username = $username
+         """.map(UserAdapter.user).single().apply()
     }
   }
 
   override def getUserById(id: Long): Future[Option[User]] = Future {
     NamedDB(cleanArchDatabase) readOnly { implicit session =>
       sql"""
-          SELECT * FROM User
+          SELECT * FROM users
           WHERE id = $id
           """.map(UserAdapter.user).single().apply()
     }
@@ -34,33 +31,31 @@ class UserRepository extends UserCallback with DatabaseModule{
   override def add(username: String, password: String): Future[User] = Future {
     NamedDB(cleanArchDatabase) localTx { implicit session =>
       val id = sql"""
-           INSERT INTO User
+           INSERT INTO users
            (username, password) VALUES ($username, $password)
          """.updateAndReturnGeneratedKey().apply()
-      sql"""
-          SELECT * FROM User
-          WHERE id = $id
-          """.map(UserAdapter.user).single().apply().get
+      User(id, username, password)
     }
   }
 
-  override def update(id: Long, user: User): Future[User] = Future {
+  override def update(id: Long, user: User): Future[Unit] = Future {
     NamedDB(cleanArchDatabase) localTx { implicit session =>
-      sql"""
-           UPDATE User SET (username = ${user.username}, password = ${user.password})
+      val successor = sql"""
+           UPDATE users SET (username = ${user.username}, password = ${user.password})
            WHERE id = $id
          """.update().apply()
-      sql"""
-          SELECT * FROM User
-          WHERE id = $id
-          """.map(UserAdapter.user).single().apply().get
+      successor match {
+        case 1 => Future successful Unit
+        case 0 => Future failed new Exception(s"User Not Found")
+        case _ => Future failed new Exception(s"Internal Server Error")
+      }
     }
   }
 
   override def remove(id: Long): Future[Unit] = Future {
     NamedDB(cleanArchDatabase) localTx { implicit session =>
       sql"""
-           DELETE FROM User WHERE id = $id
+           DELETE FROM users WHERE id = $id
          """.update().apply()
     }
   }
@@ -68,4 +63,3 @@ class UserRepository extends UserCallback with DatabaseModule{
 }
 
 object UserRepository extends UserRepository
-

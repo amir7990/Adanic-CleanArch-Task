@@ -1,6 +1,6 @@
 package cleanarch.contract.service
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent._
 
 abstract class Service[Request, Response] {
 

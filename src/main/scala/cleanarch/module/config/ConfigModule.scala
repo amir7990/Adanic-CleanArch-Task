@@ -1,6 +1,6 @@
 package cleanarch.module.config
 
-import cleanarch.application.repository.database.repository.auth.{SessionRepository, UserRepository}
+import cleanarch.application.repository.database.repository.auth._
 import cleanarch.application.repository.database.repository.todo.ItemRepository
 import cleanarch.application.usecase.auth._
 import cleanarch.contract.callback.auth._

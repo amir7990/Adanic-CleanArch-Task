@@ -6,7 +6,6 @@ import scalikejdbc.WrappedResultSet
 object UserAdapter {
 
   def user(wr: WrappedResultSet): User = {
-    println(wr)
     User(
       wr long "id",
       wr string "username",

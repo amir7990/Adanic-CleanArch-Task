@@ -1,6 +1,6 @@
 package cleanarch.application.usecase.auth
 
-import cleanarch.contract.callback.auth.{SessionCallback, UserCallback}
+import cleanarch.contract.callback.auth._
 import cleanarch.contract.service.auth._
 import cleanarch.domain.auth.Session
 
@@ -17,14 +17,13 @@ class SignOutUseCase(userCallback: UserCallback, sessionCallback: SessionCallbac
     }
     sessionOption <- sessionCallback get user.id
     session <- sessionOption match {
-      case Some(session) => Future successful session
       case None => Future failed new Exception(s"No Session Was Found for ${user.username}")
+      case Some(session) =>
+        if (!session.isLogin) Future failed new Exception(s"${user.username} Is Already Signed Out")
+        else Future successful session
     }
-    newSession <- if (!session.isLogin) {
-      Future failed new Exception(s"${user.username} Is Already Signed Out")
-    } else {
-      sessionCallback update session.updateState(state = false)
-    }
+    newSession = session.updateState(state = false)
+    _ <- sessionCallback update newSession
   } yield newSession
 
 }

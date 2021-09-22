@@ -4,7 +4,7 @@ import com.zaxxer.hikari.HikariDataSource
 import scalikejdbc._
 
 import java.util.concurrent.Executors
-import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
+import scala.concurrent._
 
 trait DatabaseModule {
 
@@ -31,9 +31,7 @@ object DatabaseModule {
     name
   }
 
-  println("Before Init")
-  val cleanArchDatabase: String = init("a")
-  println("After Init")
+  val cleanArchDatabase: String = init("cleanArchDatabase")
 
   def close(): Unit = {
     ConnectionPool.close(cleanArchDatabase)

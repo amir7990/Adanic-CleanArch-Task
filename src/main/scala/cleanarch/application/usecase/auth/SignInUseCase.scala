@@ -1,6 +1,6 @@
 package cleanarch.application.usecase.auth
 
-import cleanarch.contract.callback.auth.{SessionCallback, UserCallback}
+import cleanarch.contract.callback.auth._
 import cleanarch.contract.service.auth._
 import cleanarch.domain.auth.Session
 
@@ -13,21 +13,19 @@ class SignInUseCase(userCallback: UserCallback, sessionCallback: SessionCallback
     userOption <- userCallback getUserByUsername request.username
     user <- userOption match {
       case None => Future failed new Exception(s"User Not found")
-      case Some(user) => Future successful user
-    }
-    _ = if (user.password != request.password) {
-      Future failed new Exception(s"Incorrect Password For ${user.username}")
+      case Some(user) =>
+        if (user.password == request.password) Future successful user
+        else Future failed new Exception(s"Incorrect Password")
     }
     sessionOption <- sessionCallback get user.id
     session <- sessionOption match {
-      case Some(session) => Future successful session
       case None => Future failed new Exception(s"No Session Was Found for ${user.username}")
+      case Some(session) =>
+        if (session.isLogin) Future failed new Exception(s"${user.username} Is Already Signed In")
+        else Future successful session
     }
-    newSession <- if (session.isLogin) {
-      Future failed new Exception(s"${user.username} Is Already Signed In")
-    } else {
-      sessionCallback update session.updateState(state = true)
-    }
+    newSession = session.updateState(state = true)
+    _ <- sessionCallback update newSession
   } yield newSession
 
 }

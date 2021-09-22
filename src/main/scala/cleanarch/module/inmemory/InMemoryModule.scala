@@ -32,11 +32,10 @@ trait InMemoryModule[T] {
     t
   }
 
-  def updateElement(id: Long, t: T): Future[T] = Future {
+  def updateElement(id: Long, t: T): Future[Unit] = Future {
     data synchronized  {
       data = data + (id -> t)
     }
-    t
   }
 
   def getElement(id: Long): Future[Option[T]] = Future {

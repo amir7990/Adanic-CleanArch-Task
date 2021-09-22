@@ -13,43 +13,42 @@ class SessionRepository extends SessionCallback with DatabaseModule {
 
   override def add(userId: Long): Future[Session] = Future {
     NamedDB(cleanArchDatabase) localTx { implicit session =>
-      val id = sql"""
-           INSERT INTO Session
-           (userId, isLogin) VALUES ($userId, 'TRUE')
-         """.updateAndReturnGeneratedKey().apply()
       sql"""
-          SELECT * FROM Session
-          WHERE id = $id
-          """.map(SessionAdapter.session).single().apply().get
+           INSERT INTO sessions
+           (userId) VALUES ($userId)
+         """.updateAndReturnGeneratedKey().apply()
+      Session(userId, isLogin = true)
     }
   }
 
-  override def get(id: Long): Future[Option[Session]] = Future {
+  override def get(userId: Long): Future[Option[Session]] = Future {
     NamedDB(cleanArchDatabase) readOnly { implicit session =>
       sql"""
-          SELECT * FROM Session
-          WHERE id = $id
+          SELECT * FROM sessions
+          WHERE userId = $userId
           """.map(SessionAdapter.session).single().apply()
     }
   }
 
-  override def update(session: Session): Future[Session] = Future {
+  override def update(session: Session): Future[Unit] = Future {
     NamedDB(cleanArchDatabase) localTx { implicit s =>
-      sql"""
-           UPDATE Session SET isLogin = ${session.isLogin}
+      val successor =
+        sql"""
+           UPDATE sessions SET isLogin = ${session.isLogin}
            WHERE userId = ${session.userId}
          """.update().apply()
-      sql"""
-          SELECT * FROM Session
-          WHERE userId = ${session.userId}
-          """.map(SessionAdapter.session).single().apply().get
+      successor match {
+        case 1 => Future successful Unit
+        case 0 => Future failed new Exception(s"Session Not Found")
+        case _ => Future failed new Exception(s"Internal Server Error")
+      }
     }
   }
 
   override def remove(id: Long): Future[Unit] = Future {
     NamedDB(cleanArchDatabase) localTx { implicit session =>
       sql"""
-           DELETE FROM Session WHERE id = $id
+           DELETE FROM sessions WHERE id = $id
          """.update().apply()
     }
   }

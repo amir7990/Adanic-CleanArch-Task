@@ -10,7 +10,7 @@ abstract class SessionCallback {
 
   def get(id: Long): Future[Option[Session]]
 
-  def update(session: Session): Future[Session]
+  def update(session: Session): Future[Unit]
 
   def remove(id: Long): Future[Unit]
 

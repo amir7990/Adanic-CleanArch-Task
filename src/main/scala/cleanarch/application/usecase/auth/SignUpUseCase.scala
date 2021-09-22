@@ -1,6 +1,6 @@
 package cleanarch.application.usecase.auth
 
-import cleanarch.contract.callback.auth.{SessionCallback, UserCallback}
+import cleanarch.contract.callback.auth._
 import cleanarch.contract.service.auth._
 import cleanarch.domain.auth.User
 
@@ -15,8 +15,7 @@ class SignUpUseCase(userCallback: UserCallback, sessionCallback: SessionCallback
       case None => userCallback add(request.username, request.password)
       case Some(_) => Future failed new Exception(s"Choose Another Username. ${request.username} Already Exists!")
     }
-    sessionId = user.id
-    _ <- sessionCallback add sessionId
+    _ <- sessionCallback add user.id
   } yield user
 
 }
