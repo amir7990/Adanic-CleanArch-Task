@@ -12,7 +12,7 @@ abstract class UserCallback {
 
   def add(username: String, password: String): Future[User]
 
-  def update(id: Long, user: User): Future[Unit]
+  def update(user: User): Future[Unit]
 
   def remove(id: Long): Future[Unit]
 

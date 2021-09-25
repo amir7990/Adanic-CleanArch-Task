@@ -8,22 +8,23 @@ import scala.concurrent.Future
 
 class ItemRepository extends ItemCallback with InMemoryModule[Item] {
 
+  override val name: String = "Item"
+
   override def addItemCallback(userId: Long, text: String, state: Boolean): Future[Item] = {
-    val id = lastId
-    val item = Item(id, userId, text, state)
+    val item = Item(createId(), userId, text, state)
     addElement(item)
   }
 
-  override def getItemCallback(id: Long): Future[Option[Item]] = {
-    getElement(id)
+  override def getItemCallback(id: Long): Future[Option[Item]] = Future {
+    data.find(_.id == id)
   }
 
-  override def updateItemCallback(id: Long, item: Item): Future[Unit] = {
-    updateElement(id, item)
+  override def updateItemCallback(item: Item): Future[Unit] = {
+    updateElement(item, i => i.id == item.id)
   }
 
   override def removeItemCallback(id: Long): Future[Unit] = {
-    removeElement(id)
+    removeElement(i => i.id == id)
   }
 
 }

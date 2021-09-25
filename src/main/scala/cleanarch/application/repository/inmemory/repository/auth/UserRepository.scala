@@ -8,26 +8,27 @@ import scala.concurrent.Future
 
 class UserRepository extends UserCallback with InMemoryModule[User] {
 
+  override val name: String = "User"
+
   override def getUserByUsername(username: String): Future[Option[User]] = Future {
-    data.values.find(_.username == username)
+    data.find(_.username == username)
   }
 
   override def getUserById(id: Long): Future[Option[User]] = Future {
-    data.values.find(_.id == id)
+    data.find(_.id == id)
   }
 
   override def add(username: String, password: String): Future[User] = {
-    val id = lastId
-    val user = User(id, username, password)
+    val user = User(createId(), username, password)
     addElement(user)
   }
 
-  override def update(id: Long, user: User): Future[Unit] = {
-    updateElement(id, user)
+  override def update(user: User): Future[Unit] = {
+    updateElement(user, u => u.id == user.id)
   }
 
   override def remove(id: Long): Future[Unit] = {
-    removeElement(id)
+    removeElement(u => u.id == id)
   }
 
 }

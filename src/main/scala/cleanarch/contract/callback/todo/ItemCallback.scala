@@ -10,7 +10,7 @@ abstract class ItemCallback {
 
   def getItemCallback(id: Long): Future[Option[Item]]
 
-  def updateItemCallback(id: Long, item: Item): Future[Unit]
+  def updateItemCallback(item: Item): Future[Unit]
 
   def removeItemCallback(id: Long): Future[Unit]
 

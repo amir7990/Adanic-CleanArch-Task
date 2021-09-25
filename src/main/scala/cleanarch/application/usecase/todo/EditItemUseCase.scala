@@ -28,7 +28,7 @@ class EditItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) ex
         Future successful item.editState(done)
       case _ => Future failed new Exception(s"Invalid Field")
     }
-    _ <- itemCallback updateItemCallback(user.id, newItem)
+    _ <- itemCallback updateItemCallback(newItem)
   } yield newItem
 
 }
