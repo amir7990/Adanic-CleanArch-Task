@@ -6,12 +6,12 @@ import scala.concurrent.Future
 
 abstract class ItemCallback {
 
-  def addItemCallback(userId: Long, text: String, state: Boolean): Future[Item]
+  def add(userId: Long, text: String, state: Boolean): Future[Item]
 
-  def getItemCallback(id: Long): Future[Option[Item]]
+  def get(id: Long): Future[Option[Item]]
 
-  def updateItemCallback(item: Item): Future[Unit]
+  def update(item: Item): Future[Unit]
 
-  def removeItemCallback(id: Long): Future[Unit]
+  def remove(id: Long): Future[Unit]
 
 }

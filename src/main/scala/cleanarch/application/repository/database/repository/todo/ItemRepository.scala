@@ -11,7 +11,7 @@ import scala.concurrent.Future
 
 class ItemRepository extends ItemCallback with DatabaseModule {
 
-  override def addItemCallback(userId: Long, text: String, state: Boolean): Future[Item] = Future {
+  override def add(userId: Long, text: String, state: Boolean): Future[Item] = Future {
     NamedDB(cleanArchDatabase) localTx { implicit session =>
       val id = sql"""
            INSERT INTO items
@@ -21,7 +21,7 @@ class ItemRepository extends ItemCallback with DatabaseModule {
     }
   }
 
-  override def getItemCallback(id: Long): Future[Option[Item]] = Future {
+  override def get(id: Long): Future[Option[Item]] = Future {
     NamedDB(cleanArchDatabase) readOnly { implicit session =>
       sql"""
           SELECT * FROM items
@@ -30,11 +30,11 @@ class ItemRepository extends ItemCallback with DatabaseModule {
     }
   }
 
-  override def updateItemCallback(id: Long, item: Item): Future[Unit] = Future {
+  override def update(item: Item): Future[Unit] = Future {
     NamedDB(cleanArchDatabase) localTx { implicit session =>
       val successor = sql"""
            UPDATE items SET (message = ${item.message}, done = ${item.done})
-           WHERE id = $id
+           WHERE id = ${item.id}
          """.update().apply()
       successor match {
         case 1 => Future successful Unit
@@ -44,7 +44,7 @@ class ItemRepository extends ItemCallback with DatabaseModule {
     }
   }
 
-  override def removeItemCallback(id: Long): Future[Unit] = Future {
+  override def remove(id: Long): Future[Unit] = Future {
     NamedDB(cleanArchDatabase) localTx { implicit session =>
       sql"""
            DELETE FROM items WHERE id = $id

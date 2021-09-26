@@ -1,9 +1,5 @@
 package cleanarch.module.inmemory
 
-import cleanarch.domain.auth.Session
-import cleanarch.domain.auth.User
-import cleanarch.domain.todo.Item
-
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicLong
 import scala.concurrent.ExecutionContext
@@ -19,18 +15,14 @@ trait InMemoryModule[T] {
   protected var data: Vector[T] = Vector.empty
 
   val id : AtomicLong = new AtomicLong(1)
-  var lastId : Long = 1
 
   def createId(): Long = {
     id.getAndIncrement()
   }
 
   def addElement(t: T): Future[T] = Future {
-//    val id = createId()
     data synchronized  {
       data = data :+ t
-//      data = data + (id -> t)
-//      lastId = id + 1
     }
     t
   }
@@ -46,9 +38,6 @@ trait InMemoryModule[T] {
         }
       }
     }
-//    data synchronized  {
-//      data = data + (id -> t)
-//    }
   }
 
   def removeElement(predicate: T => Boolean): Future[Unit] = {

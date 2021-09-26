@@ -24,9 +24,9 @@ class CleanArchTest extends munit.FunSuite {
   test("Main Test") {
     // init
     val firstItem = "Hello World!"
-    val secondItem = "SALAM DONYA!"
-    val thirdItem = "Welcome To Adanic Corp."
-    val editMessage = "Message Changed"
+//    val secondItem = "SALAM DONYA!"
+//    val thirdItem = "Welcome To Adanic Corp."
+//    val editMessage = "Message Changed"
     val firstUser = "Amir"
     val firsPass = "7990"
     //

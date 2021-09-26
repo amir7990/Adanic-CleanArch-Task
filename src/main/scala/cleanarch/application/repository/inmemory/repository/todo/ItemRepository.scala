@@ -10,20 +10,20 @@ class ItemRepository extends ItemCallback with InMemoryModule[Item] {
 
   override val name: String = "Item"
 
-  override def addItemCallback(userId: Long, text: String, state: Boolean): Future[Item] = {
+  override def add(userId: Long, text: String, state: Boolean): Future[Item] = {
     val item = Item(createId(), userId, text, state)
     addElement(item)
   }
 
-  override def getItemCallback(id: Long): Future[Option[Item]] = Future {
+  override def get(id: Long): Future[Option[Item]] = Future {
     data.find(_.id == id)
   }
 
-  override def updateItemCallback(item: Item): Future[Unit] = {
+  override def update(item: Item): Future[Unit] = {
     updateElement(item, i => i.id == item.id)
   }
 
-  override def removeItemCallback(id: Long): Future[Unit] = {
+  override def remove(id: Long): Future[Unit] = {
     removeElement(i => i.id == id)
   }
 

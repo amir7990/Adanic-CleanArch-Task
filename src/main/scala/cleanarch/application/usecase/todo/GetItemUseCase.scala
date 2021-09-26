@@ -16,7 +16,7 @@ class GetItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) ext
       case None => Future failed new NoSuchElementException(s"User Not Found")
       case Some(user) => Future successful user
     }
-    itemOption <- itemCallback getItemCallback user.id
+    itemOption <- itemCallback get user.id
     item <- itemOption match {
       case None => Future failed new Exception(s"Item Not Found")
       case Some(item) => Future successful item

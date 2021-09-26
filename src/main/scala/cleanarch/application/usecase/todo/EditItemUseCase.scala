@@ -16,7 +16,7 @@ class EditItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) ex
       case None => Future failed new NoSuchElementException(s"User Not found")
       case Some(user) => Future successful user
     }
-    itemOption <- itemCallback getItemCallback user.id
+    itemOption <- itemCallback get user.id
     item <- itemOption match {
       case None => Future failed new NoSuchElementException(s"Item Not found")
       case Some(item) => Future successful item
@@ -28,7 +28,7 @@ class EditItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) ex
         Future successful item.editState(done)
       case _ => Future failed new Exception(s"Invalid Field")
     }
-    _ <- itemCallback updateItemCallback(newItem)
+    _ <- itemCallback update newItem
   } yield newItem
 
 }

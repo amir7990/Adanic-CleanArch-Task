@@ -38,11 +38,11 @@ class UserRepository extends UserCallback with DatabaseModule{
     }
   }
 
-  override def update(id: Long, user: User): Future[Unit] = Future {
+  override def update(user: User): Future[Unit] = Future {
     NamedDB(cleanArchDatabase) localTx { implicit session =>
       val successor = sql"""
            UPDATE users SET (username = ${user.username}, password = ${user.password})
-           WHERE id = $id
+           WHERE id = ${user.id}
          """.update().apply()
       successor match {
         case 1 => Future successful Unit
